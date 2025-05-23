@@ -19,6 +19,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Lint expoexample files
         run: cd expoexample && npm run lint

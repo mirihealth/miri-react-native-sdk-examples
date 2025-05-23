@@ -1,6 +1,11 @@
 name: Setup
 description: Setup Node.js and install dependencies
 
+inputs:
+  NPM_TOKEN:
+    description: "NPM Token Scoped to @miri-ai"
+    required: true
+
 runs:
   using: composite
   steps:
@@ -8,6 +13,10 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
+
+    - name: Add npmrc
+      shell: bash
+      run: echo "//registry.npmjs.org/:_authToken=${{ inputs.NPM_TOKEN }}" > ~/.npmrc
 
     # ExpoExample
     - name: Restore expoexample dependencies
