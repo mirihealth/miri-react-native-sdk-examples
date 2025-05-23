@@ -4,7 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-} from "react-native";
+} from 'react-native';
 
 import {
   Button,
@@ -16,18 +16,18 @@ import {
   ChevronLeftIcon,
   Text,
   toTitleCase,
-} from "@miri-ai/miri-react-native";
+} from '@miri-ai/miri-react-native';
 
-import { useEffect, useMemo, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const MODULE_BUTTONS: { label: string; module: ModuleNames }[] = [
-  { label: "Log Meal", module: ModuleNames.LOG_MEAL },
-  { label: "Restaurants", module: ModuleNames.RESTAURANTS },
-  { label: "Recipes", module: ModuleNames.RECIPES },
-  { label: "Cravings", module: ModuleNames.CRAVINGS },
-  { label: "Onboarding", module: ModuleNames.ACTIVATION_FLOW },
-  { label: "QuickStart", module: ModuleNames.QUICKSTART },
+  { label: 'Log Meal', module: ModuleNames.LOG_MEAL },
+  { label: 'Restaurants', module: ModuleNames.RESTAURANTS },
+  { label: 'Recipes', module: ModuleNames.RECIPES },
+  { label: 'Cravings', module: ModuleNames.CRAVINGS },
+  { label: 'Onboarding', module: ModuleNames.ACTIVATION_FLOW },
+  { label: 'QuickStart', module: ModuleNames.QUICKSTART },
 ];
 
 function ChatTab() {
@@ -47,10 +47,10 @@ function ChatTab() {
           Object.keys(ModuleNames).find(
             (key) =>
               ModuleNames[key as keyof typeof ModuleNames] === moduleName,
-          ) || ""
+          ) || ''
         )
-          .split("_")
-          .join(" ")
+          .split('_')
+          .join(' ')
           .toLowerCase(),
       ),
     [moduleName],
@@ -75,7 +75,7 @@ function ChatTab() {
     }
 
     if (Object.keys(params).length) {
-      router.replace({ pathname: "/chat" });
+      router.replace({ pathname: '/chat' });
     }
   }, [params, router]);
 
@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
     padding: 10,
   },
@@ -150,14 +150,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   buttonContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
     gap: 10,
     padding: 10,
   },
   chat: {
     flex: 1,
-    overflow: "hidden",
-    width: "100%",
+    overflow: 'hidden',
+    width: '100%',
   },
 });
 

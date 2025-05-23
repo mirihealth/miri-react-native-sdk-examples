@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-} from "react-native";
+} from 'react-native';
 
 import {
   Button,
@@ -23,12 +23,12 @@ import {
   LogOutIcon,
   UserSettings,
   CrossIcon,
-} from "@miri-ai/miri-react-native";
-import { useCallback, useState } from "react";
-import { useFocusEffect, useRouter } from "expo-router";
+} from '@miri-ai/miri-react-native';
+import { useCallback, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
 
-import { useTheme } from "@react-navigation/native";
-import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from '@react-navigation/native';
+import { useAuth } from '@/contexts/AuthContext';
 
 function Overview() {
   const {
@@ -120,7 +120,7 @@ function Overview() {
         <WeeklyCheckin
           onNavigateToChat={(params) => {
             router.navigate({
-              pathname: "/(tabs)/chat",
+              pathname: '/(tabs)/chat',
               params,
             });
           }}
@@ -158,7 +158,7 @@ function Overview() {
             <Text style={styles.mealListHeader}>Today&apos;s Meals</Text>
           </View>
           <FlatList
-            data={[{ key: "content" }]}
+            data={[{ key: 'content' }]}
             renderItem={() => (
               <MealList
                 meals={meals}
@@ -189,7 +189,7 @@ function Overview() {
                   }}
                   onNavigateToChat={(params) => {
                     router.navigate({
-                      pathname: "/(tabs)/chat",
+                      pathname: '/(tabs)/chat',
                       params,
                     });
                   }}
@@ -232,19 +232,19 @@ const styles = StyleSheet.create({
   },
   intro: {
     padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   introButtons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   controls: {
     padding: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   summary: {
     padding: 10,
@@ -255,16 +255,16 @@ const styles = StyleSheet.create({
   },
   mealListHeader: {
     fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalContent: {
     flex: 1,
   },
   modalHeader: {
     padding: 10,
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   modalInnerContent: {
     flex: 1,

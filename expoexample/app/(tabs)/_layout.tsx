@@ -1,11 +1,11 @@
-import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
-import { StyleSheet, View } from "react-native";
-import { Loader, useMiriApp } from "@miri-ai/miri-react-native";
+import React from 'react';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Tabs } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+import { Loader, useMiriApp } from '@miri-ai/miri-react-native';
 
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+  name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
@@ -29,7 +29,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Overview",
+            title: 'Overview',
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="clipboard" color={color} />
             ),
@@ -38,7 +38,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="chat"
           options={{
-            title: "Chat",
+            title: 'Chat',
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="comment" color={color} />
             ),
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loader: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

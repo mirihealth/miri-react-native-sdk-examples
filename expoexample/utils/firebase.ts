@@ -1,7 +1,7 @@
-import { initializeApp } from "@firebase/app";
-import { getReactNativePersistence, initializeAuth } from "@firebase/auth";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from "expo-constants";
+import { initializeApp } from '@firebase/app';
+import { getReactNativePersistence, initializeAuth } from '@firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
 const {
   FIREBASE_API_KEY,

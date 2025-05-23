@@ -1,24 +1,24 @@
-import { MiriAppProvider } from "@miri-ai/miri-react-native";
-import { useTheme } from "@react-navigation/native";
+import { MiriAppProvider } from '@miri-ai/miri-react-native';
+import { useTheme } from '@react-navigation/native';
 
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { FC, Fragment } from "react";
-import { Text } from "react-native";
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { FC, Fragment } from 'react';
+import { Text } from 'react-native';
 
-import Constants from "expo-constants";
-import { useAuth } from "@/contexts/AuthContext";
-import { Login } from "./Login";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Constants from 'expo-constants';
+import { useAuth } from '@/contexts/AuthContext';
+import { Login } from './Login';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-let scheme = "expoexample";
+let scheme = 'expoexample';
 
 if (Constants.expoConfig?.scheme) {
   scheme = Array.isArray(Constants.expoConfig?.scheme)
     ? Constants.expoConfig?.scheme[0]
     : Constants.expoConfig?.scheme;
 }
-const apiKey = "";
+const apiKey = '';
 
 export const Main: FC = () => {
   const theme = useTheme();
@@ -39,7 +39,7 @@ export const Main: FC = () => {
       apiKey={apiKey}
       auth={{
         token,
-        provider: "firebase",
+        provider: 'firebase',
       }}
       scheme={scheme}
       logError={console.error}
@@ -58,7 +58,7 @@ export const Main: FC = () => {
             <Stack.Screen name="index" />
             <Stack.Screen
               name="(tabs)"
-              options={{ title: "Miri SDK Expo Example" }}
+              options={{ title: 'Miri SDK Expo Example' }}
             />
           </Stack>
           <StatusBar style="auto" />

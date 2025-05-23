@@ -1,5 +1,5 @@
-import { signInWithCustomToken, User } from "@firebase/auth";
-import { getNotInitializedFn } from "@miri-ai/miri-react-native";
+import { signInWithCustomToken, User } from '@firebase/auth';
+import { getNotInitializedFn } from '@miri-ai/miri-react-native';
 import {
   createContext,
   PropsWithChildren,
@@ -8,9 +8,9 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import { auth } from "@/utils/firebase";
+import { auth } from '@/utils/firebase';
 
 export interface AuthContextType {
   token: string | null;
@@ -21,8 +21,8 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
-  setIdToken: getNotInitializedFn("AppAuthContext", "setIdToken"),
-  signout: getNotInitializedFn("AppAuthContext", "signout"),
+  setIdToken: getNotInitializedFn('AppAuthContext', 'setIdToken'),
+  signout: getNotInitializedFn('AppAuthContext', 'signout'),
   isLoading: false,
 });
 
@@ -30,7 +30,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (context === undefined) {
-    throw new Error("useAppAuth must be used within an AppAuthProvider");
+    throw new Error('useAppAuth must be used within an AppAuthProvider');
   }
 
   return context;
@@ -51,10 +51,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
         return idToken;
       } else {
-        throw new Error("No user is signed in.");
+        throw new Error('No user is signed in.');
       }
     } catch (error) {
-      console.error("Error obtaining ID token:", error);
+      console.error('Error obtaining ID token:', error);
       throw error;
     }
   }, []);
