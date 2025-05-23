@@ -1,12 +1,12 @@
-import { SafeAreaView, TextInput, StyleSheet } from "react-native";
+import { SafeAreaView, TextInput, StyleSheet } from 'react-native';
 import {
   Button,
   Text,
   useAuthVerificationAPI,
-} from "@miri-ai/miri-react-native";
-import { useCallback, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useTheme } from "@react-navigation/native";
+} from '@miri-ai/miri-react-native';
+import { useCallback, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@react-navigation/native';
 
 export const Login = () => {
   const theme = useTheme();
@@ -31,9 +31,9 @@ export const Login = () => {
       startSMSVerification(phoneNumber);
       setShowVerificationInput(true);
     } catch (error) {
-      console.error("Error starting SMS verification:", error);
-      setPhoneNumber("");
-      setVerificationCode("");
+      console.error('Error starting SMS verification:', error);
+      setPhoneNumber('');
+      setVerificationCode('');
       setShowVerificationInput(false);
     }
 
@@ -53,14 +53,14 @@ export const Login = () => {
     try {
       const token = await completeSMSVerification(
         phoneNumber,
-        verificationCode
+        verificationCode,
       );
       setIdToken(token);
       setShowVerificationInput(false);
     } catch (error) {
-      console.error("Error verifying SMS code:", error);
-      setPhoneNumber("");
-      setVerificationCode("");
+      console.error('Error verifying SMS code:', error);
+      setPhoneNumber('');
+      setVerificationCode('');
       setShowVerificationInput(false);
     }
 
@@ -105,7 +105,7 @@ export const Login = () => {
             : handlePhoneNumberSubmit
         }
       >
-        {showVerificationInput ? "Send Verification Code" : "Send SMS"}
+        {showVerificationInput ? 'Send Verification Code' : 'Send SMS'}
       </Button>
     </SafeAreaView>
   );
@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
   },
   authFormHeader: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   input: {
-    borderColor: "gray",
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 20,
     paddingVertical: 20,
