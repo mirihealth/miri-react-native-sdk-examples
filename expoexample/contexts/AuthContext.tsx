@@ -1,5 +1,7 @@
 import { signInWithCustomToken, User } from '@firebase/auth';
 import { getNotInitializedFn } from '@miri-ai/miri-react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
 import {
   createContext,
   PropsWithChildren,
@@ -10,20 +12,24 @@ import {
   useState,
 } from 'react';
 
-import { auth } from '@/utils/firebase';
+const GOOGLE_IOS_CLIENT_ID = Constants.expoConfig?.extra?.googleIOSClientId;
+console.log({ GOOGLE_IOS_CLIENT_ID });
 
 export interface AuthContextType {
   token: string | null;
-  setIdToken: (customToken: string) => Promise<void>;
+  setToken: (token: string | null) => void;
   signout: () => Promise<void>;
-  isLoading: boolean;
 }
+
+GoogleSignin.configure({
+  iosClientId: GOOGLE_IOS_CLIENT_ID,
+  scopes: ['profile', 'email', 'openid'],
+});
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
-  setIdToken: getNotInitializedFn('AppAuthContext', 'setIdToken'),
+  setToken: getNotInitializedFn('AppAuthContext', 'setIdToken'),
   signout: getNotInitializedFn('AppAuthContext', 'signout'),
-  isLoading: false,
 });
 
 export const useAuth = () => {
@@ -38,73 +44,24 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const getIdTokenFromCustomToken = useCallback(async (customToken: string) => {
-    try {
-      // Sign in with the custom token
-      const userCredential = await signInWithCustomToken(auth, customToken);
-      const user = userCredential.user;
-
-      if (user) {
-        const idToken = await user.getIdToken();
-
-        return idToken;
-      } else {
-        throw new Error('No user is signed in.');
-      }
-    } catch (error) {
-      console.error('Error obtaining ID token:', error);
-      throw error;
-    }
-  }, []);
-
-  const setIdToken = useCallback(
-    async (customToken: string) => {
-      const idToken = await getIdTokenFromCustomToken(customToken);
-      setToken(idToken);
-    },
-    [getIdTokenFromCustomToken],
-  );
 
   const signout = useCallback(async () => {
-    await auth.signOut();
-    setToken(null);
+    try {
+      await GoogleSignin.signOut();
+      setToken(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   }, []);
-
-  useEffect(() => {
-    const authChangeHandler = async (user: User | null) => {
-      if (user) {
-        const token = await user.getIdToken();
-        setToken(token);
-      } else {
-        setToken(null);
-      }
-
-      setIsLoading(false);
-    };
-    const removeAuthStateChanged = auth.onAuthStateChanged(authChangeHandler);
-    const removeIdTokenChanged = auth.onIdTokenChanged(authChangeHandler);
-
-    return () => {
-      removeAuthStateChanged();
-      removeIdTokenChanged();
-    };
-  }, [auth, setToken]);
 
   const value = useMemo(
     () => ({
       token,
-      setIdToken,
+      setToken,
       signout,
-      isLoading,
     }),
-    [token, setIdToken, signout, isLoading],
+    [signout, token],
   );
-
-  if (isLoading) {
-    return null;
-  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

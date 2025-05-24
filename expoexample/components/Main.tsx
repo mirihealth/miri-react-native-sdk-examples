@@ -18,13 +18,15 @@ if (Constants.expoConfig?.scheme) {
     ? Constants.expoConfig?.scheme[0]
     : Constants.expoConfig?.scheme;
 }
-const apiKey = '';
+
+const GOOGLE_IOS_CLIENT_ID = Constants.expoConfig?.extra?.googleIOSClientId;
+const MIRI_API_KEY = Constants.expoConfig?.extra?.miriApiKey;
 
 export const Main: FC = () => {
   const theme = useTheme();
   const { token } = useAuth();
 
-  if (!apiKey) {
+  if (!MIRI_API_KEY) {
     return (
       <SafeAreaView>
         <Text style={{ color: theme.colors.text }}>
@@ -36,10 +38,14 @@ export const Main: FC = () => {
 
   return (
     <MiriAppProvider
-      apiKey={apiKey}
+      apiKey={MIRI_API_KEY}
       auth={{
         token,
-        provider: 'firebase',
+        provider: 'google',
+        config: {
+          client_id: GOOGLE_IOS_CLIENT_ID,
+          issuer_url: 'https://accounts.google.com',
+        },
       }}
       scheme={scheme}
       logError={console.error}
