@@ -44,7 +44,7 @@ export const Main: FC = () => {
         provider: 'google',
         config: {
           client_id: GOOGLE_IOS_CLIENT_ID,
-          issuer_url: 'https://accounts.google.com',
+          issuer_url: 'https://www.googleapis.com/oauth2/v3/certs',
         },
       }}
       scheme={scheme}
