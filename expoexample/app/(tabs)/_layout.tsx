@@ -28,7 +28,9 @@ export default function TabLayout() {
     return (
       <View style={[styles.container, styles.loader]}>
         <Text>Unable to load Miri User</Text>
-        <Button onPress={signout}>Sign Out</Button>
+        <Button onPress={signout} size="sm">
+          Sign Out
+        </Button>
       </View>
     );
   }
