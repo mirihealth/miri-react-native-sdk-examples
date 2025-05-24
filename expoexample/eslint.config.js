@@ -12,6 +12,7 @@ module.exports = defineConfig([
     },
     rules: {
       'prettier/prettier': 'error',
+      'no-console': ['error', { allow: ['error'] }],
     },
   },
 ]);

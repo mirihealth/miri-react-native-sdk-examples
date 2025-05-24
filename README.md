@@ -4,7 +4,7 @@ Examples for the [Miri React Native SDK](https://www.miri.ai/developer/docs/alph
 
 ## Authentication
 
-All examples in this repo use [firebase](https://firebase.google.com/docs/web/learn-more) to authenticate with `@miri-ai/miri-react-native`. You can also use `google` and `apple` authentication. See the docs above on how to create a firebase web app. Once you have done so, copy the config object passed to `initializeApp`.
+All examples in this repo use [google signin](https://react-native-google-signin.github.io/docs/original) to authenticate with `@miri-ai/miri-react-native`. You can also use `firebase` and `apple` authentication. You'll need to create a Client ID for IOS to test in the IOS simulator.
 
 ## Expo Example
 

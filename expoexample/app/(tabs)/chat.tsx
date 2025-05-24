@@ -16,17 +16,18 @@ import {
   ChevronLeftIcon,
   Text,
   toTitleCase,
+  theme,
 } from '@miri-ai/miri-react-native';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const MODULE_BUTTONS: { label: string; module: ModuleNames }[] = [
-  { label: 'Log Meal', module: ModuleNames.LOG_MEAL },
-  { label: 'Restaurants', module: ModuleNames.RESTAURANTS },
-  { label: 'Recipes', module: ModuleNames.RECIPES },
-  { label: 'Cravings', module: ModuleNames.CRAVINGS },
   { label: 'Onboarding', module: ModuleNames.ACTIVATION_FLOW },
+  { label: 'Log Meal', module: ModuleNames.LOG_MEAL },
+  { label: 'Figure it out: Restaurants', module: ModuleNames.RESTAURANTS },
+  { label: 'Figure it out: Recipes', module: ModuleNames.RECIPES },
+  { label: 'Figure it out: Cravings', module: ModuleNames.CRAVINGS },
   { label: 'QuickStart', module: ModuleNames.QUICKSTART },
 ];
 
@@ -99,7 +100,7 @@ function ChatTab() {
           <View style={styles.chat}>
             <View style={styles.header}>
               <Pressable onPress={() => setModuleName(undefined)}>
-                <ChevronLeftIcon />
+                <ChevronLeftIcon color={theme.colors.foreground} />
               </Pressable>
               <Text style={styles.headerText}>{humanReadableModuleName}</Text>
             </View>

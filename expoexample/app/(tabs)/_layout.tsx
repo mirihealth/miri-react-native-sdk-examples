@@ -2,7 +2,8 @@ import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { Loader, useMiriApp } from '@miri-ai/miri-react-native';
+import { Button, Loader, Text, useMiriApp } from '@miri-ai/miri-react-native';
+import { useAuth } from '@/contexts/AuthContext';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -13,12 +14,23 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const { isLoading, miriUser } = useMiriApp();
-  console.log({ miriUser });
+  const { signout } = useAuth();
 
   if (isLoading) {
     return (
       <View style={[styles.container, styles.loader]}>
         <Loader />
+      </View>
+    );
+  }
+
+  if (!miriUser) {
+    return (
+      <View style={[styles.container, styles.loader]}>
+        <Text>Unable to load Miri User</Text>
+        <Button onPress={signout} size="sm">
+          Sign Out
+        </Button>
       </View>
     );
   }
@@ -56,5 +68,6 @@ const styles = StyleSheet.create({
   loader: {
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 20,
   },
 });

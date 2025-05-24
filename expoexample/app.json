@@ -2,6 +2,7 @@
   "expo": {
     "name": "expoexample",
     "slug": "expoexample",
+    "owner": "shekhar-miri",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,13 +10,15 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shekharmiri.expoexample"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shekharmiri.expoexample"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +34,18 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.1027861089695-drd0bqrcrqe65cfruh65llshjlk8smv5"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "expoexample will use your photos to help you track your health and personalize your nutrition coaching."
         }
       ]
     ],
