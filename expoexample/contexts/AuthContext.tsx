@@ -1,4 +1,3 @@
-import { signInWithCustomToken, User } from '@firebase/auth';
 import { getNotInitializedFn } from '@miri-ai/miri-react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
@@ -7,13 +6,11 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
 
 const GOOGLE_IOS_CLIENT_ID = Constants.expoConfig?.extra?.googleIOSClientId;
-console.log({ GOOGLE_IOS_CLIENT_ID });
 
 export interface AuthContextType {
   token: string | null;
