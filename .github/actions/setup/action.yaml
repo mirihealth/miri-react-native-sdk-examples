@@ -42,3 +42,28 @@ runs:
         path: |
           **/expoexample/node_modules
         key: ${{ steps.npm-cache.outputs.cache-primary-key }}
+
+    # ReactNativeExample
+    - name: Restore reactnativeexample dependencies
+      id: npm-cache
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          **/reactnativeexample/node_modules
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/reactnativeexample/package-lock.json') }}-${{ hashFiles('**/reactnativeexample/package.json', '!node_modules/**') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-${{ hashFiles('**/reactnativeexample/package-lock.json') }}
+          ${{ runner.os }}-npm-
+
+    - name: Install reactnativeexample dependencies
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      run: cd reactnativeexample && npm install
+      shell: bash
+
+    - name: Cache reactnativeexample  dependencies
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          **/reactnativeexample/node_modules
+        key: ${{ steps.npm-cache.outputs.cache-primary-key }}
