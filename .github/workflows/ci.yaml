@@ -30,3 +30,12 @@ jobs:
 
       - name: Typecheck expoexample files
         run: cd expoexample && npm run typecheck
+
+      - name: Lint reactnativeexample files
+        run: cd reactnativeexample && npm run lint
+
+      - name: Prettier check reactnativeexample files
+        run: cd reactnativeexample && npm run prettier:check
+
+      - name: Typecheck reactnativeexample files
+        run: cd reactnativeexample && npm run typecheck
