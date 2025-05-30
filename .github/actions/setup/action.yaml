@@ -20,7 +20,7 @@ runs:
 
     # ExpoExample
     - name: Restore expoexample dependencies
-      id: npm-cache
+      id: npm-cache-expoexample
       uses: actions/cache/restore@v4
       with:
         path: |
@@ -31,21 +31,21 @@ runs:
           ${{ runner.os }}-npm-
 
     - name: Install expoexample dependencies
-      if: steps.npm-cache.outputs.cache-hit != 'true'
+      if: steps.npm-cache-expoexample.outputs.cache-hit != 'true'
       run: cd expoexample && npm install
       shell: bash
 
     - name: Cache expoexample  dependencies
-      if: steps.npm-cache.outputs.cache-hit != 'true'
+      if: steps.npm-cache-expoexample.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
         path: |
           **/expoexample/node_modules
-        key: ${{ steps.npm-cache.outputs.cache-primary-key }}
+        key: ${{ steps.npm-cache-expoexample.outputs.cache-primary-key }}
 
     # ReactNativeExample
     - name: Restore reactnativeexample dependencies
-      id: npm-cache
+      id: npm-cache-reactnativeexample
       uses: actions/cache/restore@v4
       with:
         path: |
@@ -56,14 +56,14 @@ runs:
           ${{ runner.os }}-npm-
 
     - name: Install reactnativeexample dependencies
-      if: steps.npm-cache.outputs.cache-hit != 'true'
+      if: steps.npm-cache-reactnativeexample.outputs.cache-hit != 'true'
       run: cd reactnativeexample && npm install
       shell: bash
 
     - name: Cache reactnativeexample  dependencies
-      if: steps.npm-cache.outputs.cache-hit != 'true'
+      if: steps.npm-cache-reactnativeexample.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
         path: |
           **/reactnativeexample/node_modules
-        key: ${{ steps.npm-cache.outputs.cache-primary-key }}
+        key: ${{ steps.npm-cache-reactnativeexample.outputs.cache-primary-key }}
