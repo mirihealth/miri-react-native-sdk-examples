@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { FC, Fragment } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Chat } from './Chat';
 import Overview from './Overview';
 import { BottomTabParamList } from './types';
@@ -23,18 +24,46 @@ export const Tabs: FC = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <TabNavigator.Navigator
-        screenOptions={{
-          headerTitle: 'Miri SDK React Native Example',
-        }}
-      >
-        {miriUser && (
+      {miriUser && (
+        <TabNavigator.Navigator
+          screenOptions={{
+            headerTitle: 'Miri SDK React Native Example',
+          }}
+        >
           <Fragment>
-            <TabNavigator.Screen name="Overview" component={Overview} />
-            <TabNavigator.Screen name="Chat" component={Chat} />
+            <TabNavigator.Screen
+              name="Overview"
+              component={Overview}
+              options={{
+                // eslint-disable-next-line react/no-unstable-nested-components
+                tabBarIcon: ({ color, size, focused }) => (
+                  <Icon
+                    name="clipboard"
+                    solid={!!focused}
+                    size={size}
+                    color={color}
+                  />
+                ),
+              }}
+            />
+            <TabNavigator.Screen
+              name="Chat"
+              component={Chat}
+              options={{
+                // eslint-disable-next-line react/no-unstable-nested-components
+                tabBarIcon: ({ color, size, focused }) => (
+                  <Icon
+                    name="comment"
+                    solid={!!focused}
+                    size={size}
+                    color={color}
+                  />
+                ),
+              }}
+            />
           </Fragment>
-        )}
-      </TabNavigator.Navigator>
+        </TabNavigator.Navigator>
+      )}
     </NavigationContainer>
   );
 };

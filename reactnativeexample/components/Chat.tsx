@@ -133,7 +133,7 @@ export const Chat: FC<BottomTabScreenProps<BottomTabParamList, 'Chat'>> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
+    padding: 10,
   },
   header: {
     flexDirection: 'row',
