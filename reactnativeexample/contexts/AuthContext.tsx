@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -46,6 +47,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       setToken(null);
     } catch (error) {
       console.error('Error signing out:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const currentUser = GoogleSignin.getCurrentUser();
+    if (currentUser?.idToken) {
+      setToken(currentUser.idToken);
     }
   }, []);
 
