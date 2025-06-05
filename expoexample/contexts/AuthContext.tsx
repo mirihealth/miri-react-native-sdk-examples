@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -51,6 +52,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  useEffect(() => {
+    const currentUser = GoogleSignin.getCurrentUser();
+    if (currentUser?.idToken) {
+      setToken(currentUser.idToken);
+    }
+  }, []);
   const value = useMemo(
     () => ({
       token,

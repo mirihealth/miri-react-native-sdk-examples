@@ -37,12 +37,6 @@
         }
       ],
       [
-        "@react-native-google-signin/google-signin",
-        {
-          "iosUrlScheme": "com.googleusercontent.apps.1027861089695-drd0bqrcrqe65cfruh65llshjlk8smv5"
-        }
-      ],
-      [
         "expo-camera",
         {
           "cameraPermission": "expoexample will use your photos to help you track your health and personalize your nutrition coaching."
