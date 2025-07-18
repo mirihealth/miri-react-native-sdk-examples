@@ -41,7 +41,8 @@
         {
           "cameraPermission": "expoexample will use your photos to help you track your health and personalize your nutrition coaching."
         }
-      ]
+      ],
+      ["expo-web-browser"]
     ],
     "experiments": {
       "typedRoutes": true
