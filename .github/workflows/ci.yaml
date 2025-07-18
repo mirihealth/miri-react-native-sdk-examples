@@ -25,6 +25,9 @@ jobs:
       - name: Lint expoexample files
         run: cd expoexample && npm run lint
 
+      - name: Run expo-doctor
+        run: cd expoexample && npx expo-doctor
+
       - name: Lint reactnativeexample files
         run: cd reactnativeexample && npm run lint
 
