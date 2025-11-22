@@ -12,8 +12,12 @@ import {
   TrackingItemsSummary,
   useMiriApp,
   UserSettings,
-  WeeklyCheckin,
-  WeightProgress,
+  CheckinCard,
+  BodyStatsProgress,
+  FIOPicker,
+  LogPicker,
+  ChatSearchParams,
+  BodyComposition,
 } from '@miri-ai/miri-react-native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation, useTheme } from '@react-navigation/native';
@@ -22,10 +26,10 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Modal,
-  SafeAreaView,
   StyleSheet,
   View,
 } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { BottomTabParamList } from './types';
 
@@ -37,6 +41,7 @@ function Overview() {
     getMeals,
     getTrackingItemsProgress,
     getWeightProgress,
+    getBodyComposition,
   } = useMiriApp();
   const [meals, setMeals] = useState<Meal[]>([]);
   const [areMealsLoading, setAreMealsLoading] = useState(true);
@@ -46,6 +51,8 @@ function Overview() {
   const [weightProgress, setWeightProgress] =
     useState<Awaited<ReturnType<typeof getWeightProgress>>>();
   const [isWeightProgressLoading, setIsWeightProgressLoading] = useState(true);
+  const [bodyComposition, setBodyComposition] =
+    useState<BodyComposition | null>(null);
   const [selectedMeal, setSelectedMeal] = useState<Meal | undefined>();
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const navigation =
@@ -76,20 +83,32 @@ function Overview() {
     setIsWeightProgressLoading(false);
   }, [getWeightProgress]);
 
+  const fetchBodyComposition = useCallback(async () => {
+    const fetchedBodyComposition = await getBodyComposition();
+    setBodyComposition(fetchedBodyComposition);
+  }, [getBodyComposition]);
+
+  const handleNavigateToChat = useCallback(
+    (params: ChatSearchParams) => {
+      navigation.navigate('Chat', params);
+    },
+    [navigation],
+  );
+
   useEffect(() => {
     fetchTodaysMeals();
-  }, [fetchTodaysMeals]);
-
-  useEffect(() => {
     fetchProgress();
-  }, [fetchProgress]);
-
-  useEffect(() => {
     fetchWeightProgress();
-  }, [fetchWeightProgress]);
+    fetchBodyComposition();
+  }, [
+    fetchTodaysMeals,
+    fetchProgress,
+    fetchWeightProgress,
+    fetchBodyComposition,
+  ]);
 
   return (
-    <SafeAreaView
+    <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
       <KeyboardAvoidingView
@@ -119,9 +138,7 @@ function Overview() {
           </View>
         </View>
 
-        <WeeklyCheckin
-          onNavigateToChat={(params) => navigation.navigate('Chat', params)}
-        />
+        <CheckinCard onNavigateToChat={handleNavigateToChat} />
 
         <View style={styles.controls}>
           <DateSelector
@@ -130,17 +147,18 @@ function Overview() {
             onChange={(date) => setSelectedDate(date)}
           />
           {weightProgress && (
-            <WeightProgress
+            <BodyStatsProgress
               weightProgress={weightProgress}
               onUpdateWeightTracking={fetchWeightProgress}
               isLoading={isWeightProgressLoading}
+              bodyComposition={bodyComposition}
             />
           )}
         </View>
 
-        {progress?.streakCards.map((streak) => (
-          <StreakTracking streak={streak} key={streak.label} />
-        ))}
+        {progress?.streakCards && (
+          <StreakTracking streaks={progress?.streakCards} />
+        )}
 
         <View style={styles.summary}>
           <TrackingItemsSummary
@@ -165,55 +183,67 @@ function Overview() {
               />
             )}
           />
+          {weightProgress && (
+            <View style={styles.pickerBar}>
+              <FIOPicker onNavigateToChat={handleNavigateToChat} />
+              <LogPicker
+                onNavigateToChat={handleNavigateToChat}
+                weightProgress={weightProgress}
+                onUpdateTracking={fetchWeightProgress}
+              />
+            </View>
+          )}
           <Modal
             visible={selectedMeal !== undefined}
             transparent
             animationType="slide"
           >
-            <SafeAreaView
-              style={[
-                styles.modalContent,
-                { backgroundColor: theme.colors.background },
-              ]}
-            >
-              {selectedMeal && (
-                <MealDetail
-                  mealId={selectedMeal?.id}
-                  onDonePress={closeMealDetail}
-                  onSave={async () => {
-                    await fetchTodaysMeals();
-                    closeMealDetail();
-                  }}
-                  onNavigateToChat={(params) => {
-                    navigation.navigate('Chat', params);
-                  }}
-                />
-              )}
-            </SafeAreaView>
+            <SafeAreaProvider>
+              <SafeAreaView
+                style={[
+                  styles.modalContent,
+                  { backgroundColor: theme.colors.background },
+                ]}
+              >
+                {selectedMeal && (
+                  <MealDetail
+                    mealId={selectedMeal?.id}
+                    onDonePress={closeMealDetail}
+                    onSave={async () => {
+                      await fetchTodaysMeals();
+                      closeMealDetail();
+                    }}
+                    onNavigateToChat={handleNavigateToChat}
+                  />
+                )}
+              </SafeAreaView>
+            </SafeAreaProvider>
           </Modal>
           <Modal visible={isSettingsVisible} transparent animationType="slide">
-            <SafeAreaView
-              style={[
-                styles.modalContent,
-                { backgroundColor: theme.colors.background },
-              ]}
-            >
-              <View style={styles.modalHeader}>
-                <Button
-                  size="sm"
-                  variant="tertiary"
-                  icon={CrossIcon}
-                  onPress={() => setIsSettingsVisible(false)}
-                />
-              </View>
-              <View style={styles.modalInnerContent}>
-                <UserSettings />
-              </View>
-            </SafeAreaView>
+            <SafeAreaProvider>
+              <SafeAreaView
+                style={[
+                  styles.modalContent,
+                  { backgroundColor: theme.colors.background },
+                ]}
+              >
+                <View style={styles.modalHeader}>
+                  <Button
+                    size="sm"
+                    variant="tertiary"
+                    icon={CrossIcon}
+                    onPress={() => setIsSettingsVisible(false)}
+                  />
+                </View>
+                <View style={styles.modalInnerContent}>
+                  <UserSettings />
+                </View>
+              </SafeAreaView>
+            </SafeAreaProvider>
           </Modal>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -251,6 +281,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  pickerBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    gap: 10,
   },
   mealDetailContainer: {
     flex: 1,

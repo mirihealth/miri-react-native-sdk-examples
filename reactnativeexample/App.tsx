@@ -5,6 +5,8 @@ import {
 } from '@react-navigation/native';
 import React from 'react';
 import { useColorScheme } from 'react-native';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+
 import { Main } from './components/Main';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -22,7 +24,9 @@ function App(): React.JSX.Element {
       }
     >
       <AuthProvider>
-        <Main />
+        <KeyboardProvider>
+          <Main />
+        </KeyboardProvider>
       </AuthProvider>
     </ThemeProvider>
   );
