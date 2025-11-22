@@ -6,7 +6,7 @@ import {
   isSuccessResponse,
 } from '@react-native-google-signin/google-signin';
 import { useCallback } from 'react';
-import {  StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const Login = () => {

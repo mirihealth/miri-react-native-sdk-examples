@@ -2,7 +2,7 @@ import { GOOGLE_IOS_CLIENT_ID, MIRI_API_KEY } from '@env';
 import { MiriAppProvider } from '@miri-ai/miri-react-native';
 import { useTheme } from '@react-navigation/native';
 import { FC } from 'react';
-import {  Text } from 'react-native';
+import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { Login } from './Login';
