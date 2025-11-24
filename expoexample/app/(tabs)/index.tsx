@@ -189,6 +189,7 @@ function Overview() {
               <LogPicker
                 onNavigateToChat={handleNavigateToChat}
                 weightProgress={weightProgress}
+                bodyComposition={bodyComposition}
                 onUpdateTracking={fetchWeightProgress}
               />
             </View>
