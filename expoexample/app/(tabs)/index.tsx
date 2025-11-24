@@ -187,9 +187,9 @@ function Overview() {
             <View style={styles.pickerBar}>
               <FIOPicker onNavigateToChat={handleNavigateToChat} />
               <LogPicker
-                onNavigateToChat={handleNavigateToChat}
                 weightProgress={weightProgress}
                 bodyComposition={bodyComposition}
+                onNavigateToChat={handleNavigateToChat}
                 onUpdateTracking={fetchWeightProgress}
               />
             </View>
