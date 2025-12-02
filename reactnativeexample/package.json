@@ -14,7 +14,7 @@
     "install:sdk:latest": "npm un @miri-ai/miri-react-native && npm install @miri-ai/miri-react-native@latest"
   },
   "dependencies": {
-    "@miri-ai/miri-react-native": "^0.107.0",
+    "@miri-ai/miri-react-native": "^0.109.0",
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/blur": "^4.4.1",
     "@react-native-community/datetimepicker": "^8.3.0",

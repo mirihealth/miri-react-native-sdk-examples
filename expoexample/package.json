@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
-    "@miri-ai/miri-react-native": "^0.107.0",
+    "@miri-ai/miri-react-native": "^0.109.0",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-google-signin/google-signin": "^14.0.1",
