@@ -28,7 +28,7 @@ const getActivationFlowModule = (program: any): Module | undefined => {
 
 export const useActivationStatus = (): UseActivationStatusReturn => {
   const { careSeeker, isLoading: isCareSeekerLoading } = useCareSeeker();
-  const { program, isLoading: isProgramLoading } = useProgram();
+  const { program, loading: isProgramLoading } = useProgram();
 
   const isActivationComplete = useMemo(() => {
     return !!careSeeker?.completedOnboardingAt;
