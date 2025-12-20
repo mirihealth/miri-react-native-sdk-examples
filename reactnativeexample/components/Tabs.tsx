@@ -1,9 +1,7 @@
-import {
-  Loader,
-  ModuleNames,
-  useActivationStatus,
-  useMiriApp,
-} from '@miri-ai/miri-react-native';
+import { Loader, ModuleNames, useMiriApp } from '@miri-ai/miri-react-native';
+// TODO: Replace with SDK export after @miri-ai/miri-react-native@1.129.0 is published:
+// import { useActivationStatus } from '@miri-ai/miri-react-native';
+import { useActivationStatus } from '../hooks/useActivationStatus';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   NavigationContainer,
