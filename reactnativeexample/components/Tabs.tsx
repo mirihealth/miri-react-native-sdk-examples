@@ -22,8 +22,11 @@ const TabNavigator = createBottomTabNavigator<BottomTabParamList>();
 
 export const Tabs: FC = () => {
   const { isLoading, miriUser } = useMiriApp();
-  const { isActivationComplete, activationModule, isLoading: isActivationLoading } =
-    useActivationStatus();
+  const {
+    isActivationComplete,
+    activationModule,
+    isLoading: isActivationLoading,
+  } = useActivationStatus();
   const theme = useTheme();
   const navigationRef = useNavigationContainerRef<BottomTabParamList>();
 
