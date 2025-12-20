@@ -1,6 +1,6 @@
 import { MiriAppProvider } from '@miri-ai/miri-react-native';
 import { useTheme } from '@react-navigation/native';
-
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { FC, Fragment } from 'react';
@@ -37,41 +37,43 @@ export const Main: FC = () => {
   }
 
   return (
-    <MiriAppProvider
-      apiKey={MIRI_API_KEY}
-      auth={{
-        token,
-        provider: 'google',
-        config: {
-          client_id: GOOGLE_IOS_CLIENT_ID,
-          issuer_url: 'https://www.googleapis.com/oauth2/v3/certs',
-        },
-      }}
-      scheme={scheme}
-      logError={console.error}
-      theme={{
-        colors: {
-          background: theme.colors.background,
-          text: theme.colors.text,
-        },
-        fonts: theme.fonts,
-      }}
-      env="staging"
-    >
-      {token ? (
-        <Fragment>
-          <Stack>
-            <Stack.Screen name="index" />
-            <Stack.Screen
-              name="(tabs)"
-              options={{ title: 'Miri SDK Expo Example' }}
-            />
-          </Stack>
-          <StatusBar style="auto" />
-        </Fragment>
-      ) : (
-        <Login />
-      )}
-    </MiriAppProvider>
+    <KeyboardProvider>
+      <MiriAppProvider
+        apiKey={MIRI_API_KEY}
+        auth={{
+          token,
+          provider: 'google',
+          config: {
+            client_id: GOOGLE_IOS_CLIENT_ID,
+            issuer_url: 'https://www.googleapis.com/oauth2/v3/certs',
+          },
+        }}
+        scheme={scheme}
+        logError={console.error}
+        theme={{
+          colors: {
+            background: theme.colors.background,
+            text: theme.colors.text,
+          },
+          fonts: theme.fonts,
+        }}
+        env="staging"
+      >
+        {token ? (
+          <Fragment>
+            <Stack>
+              <Stack.Screen name="index" />
+              <Stack.Screen
+                name="(tabs)"
+                options={{ title: 'Miri SDK Expo Example' }}
+              />
+            </Stack>
+            <StatusBar style="auto" />
+          </Fragment>
+        ) : (
+          <Login />
+        )}
+      </MiriAppProvider>
+    </KeyboardProvider>
   );
 };

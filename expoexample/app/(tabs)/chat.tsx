@@ -1,10 +1,10 @@
 import {
   KeyboardAvoidingView,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   Button,
@@ -81,7 +81,7 @@ function ChatTab() {
   }, [params, router]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <KeyboardAvoidingView behavior="padding" style={styles.innerContainer}>
         {!moduleName && (
           <View style={styles.buttonContainer}>
@@ -130,7 +130,7 @@ function ChatTab() {
           </View>
         )}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 

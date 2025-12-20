@@ -11,7 +11,8 @@ import {
   useTheme,
 } from '@react-navigation/native';
 import { FC, Fragment, useEffect } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Chat } from './Chat';
 import Overview from './Overview';
