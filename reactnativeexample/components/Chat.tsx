@@ -118,7 +118,7 @@ export const Chat: FC<BottomTabScreenProps<BottomTabParamList, 'Chat'>> = ({
                 ? `Hello from ${activeCoach.displayName}! What would you like to talk about?`
                 : undefined
             }
-            onEndChat={() => setModuleName(undefined)}
+            onEndChat={async () => setModuleName(undefined)}
             endChatLabel="Close"
           >
             <MessagesList />
