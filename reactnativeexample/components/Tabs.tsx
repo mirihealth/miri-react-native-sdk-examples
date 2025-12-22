@@ -20,22 +20,19 @@ const TabNavigator = createBottomTabNavigator<BottomTabParamList>();
 
 export const Tabs: FC = () => {
   const { isLoading, miriUser } = useMiriApp();
-  const {
-    isActivationComplete,
-    activationModule,
-    isLoading: isActivationLoading,
-  } = useActivationStatus();
+  const { isActivationComplete, activationModule } = useActivationStatus();
   const theme = useTheme();
   const navigationRef = useNavigationContainerRef<BottomTabParamList>();
 
   // Redirect to activation flow if not completed
+  // Uses data-based checks instead of loading states for reliability
   useEffect(() => {
-    if (isLoading || isActivationLoading || !miriUser) {
+    if (isLoading || !miriUser) {
       return;
     }
 
     // If activation is not complete and we have an activation module, navigate to it
-    if (!isActivationComplete && activationModule) {
+    if (!isActivationComplete && activationModule?.name) {
       // Use a small timeout to ensure navigation is ready
       const timer = setTimeout(() => {
         navigationRef.current?.navigate('Chat', {
@@ -48,14 +45,13 @@ export const Tabs: FC = () => {
     }
   }, [
     isLoading,
-    isActivationLoading,
     isActivationComplete,
     activationModule,
     miriUser,
     navigationRef,
   ]);
 
-  if (isLoading || isActivationLoading) {
+  if (isLoading) {
     return (
       <SafeAreaView style={[styles.container, styles.loader]}>
         <Loader />
