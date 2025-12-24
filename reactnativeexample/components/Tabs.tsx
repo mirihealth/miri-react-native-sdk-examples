@@ -1,7 +1,16 @@
-import { Loader, useMiriApp } from '@miri-ai/miri-react-native';
+import {
+  Loader,
+  ModuleNames,
+  useActivationStatus,
+  useMiriApp,
+} from '@miri-ai/miri-react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, useTheme } from '@react-navigation/native';
-import { FC, Fragment } from 'react';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+  useTheme,
+} from '@react-navigation/native';
+import { FC, Fragment, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -13,7 +22,36 @@ const TabNavigator = createBottomTabNavigator<BottomTabParamList>();
 
 export const Tabs: FC = () => {
   const { isLoading, miriUser } = useMiriApp();
+  const { isActivationComplete, activationModule } = useActivationStatus();
   const theme = useTheme();
+  const navigationRef = useNavigationContainerRef<BottomTabParamList>();
+
+  // Redirect to activation flow if not completed
+  // Uses data-based checks instead of loading states for reliability
+  useEffect(() => {
+    if (isLoading || !miriUser) {
+      return;
+    }
+
+    // If activation is not complete and we have an activation module, navigate to it
+    if (!isActivationComplete && activationModule?.name) {
+      // Use a small timeout to ensure navigation is ready
+      const timer = setTimeout(() => {
+        navigationRef.current?.navigate('Chat', {
+          moduleName: activationModule.name ?? ModuleNames.ACTIVATION_FLOW,
+          sendUserMessage: 'start_assistant',
+          hideUserMessage: 'true',
+        });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [
+    isLoading,
+    isActivationComplete,
+    activationModule,
+    miriUser,
+    navigationRef,
+  ]);
 
   if (isLoading) {
     return (
@@ -24,7 +62,7 @@ export const Tabs: FC = () => {
   }
 
   return (
-    <NavigationContainer theme={theme}>
+    <NavigationContainer ref={navigationRef} theme={theme}>
       {miriUser && (
         <TabNavigator.Navigator
           screenOptions={{
