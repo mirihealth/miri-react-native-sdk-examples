@@ -1,9 +1,9 @@
-import { MiriAppProvider } from '@miri-ai/miri-react-native';
+import { MiriAppProvider, MiriAuth } from '@miri-ai/miri-react-native';
 import { useTheme } from '@react-navigation/native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useMemo } from 'react';
 import { Text } from 'react-native';
 
 import Constants from 'expo-constants';
@@ -21,10 +21,47 @@ if (Constants.expoConfig?.scheme) {
 
 const GOOGLE_IOS_CLIENT_ID = Constants.expoConfig?.extra?.googleIOSClientId;
 const MIRI_API_KEY = Constants.expoConfig?.extra?.miriApiKey;
+const FIREBASE_PROJECT_ID = Constants.expoConfig?.extra?.firebaseProjectId;
+const AUTH_PROVIDER = Constants.expoConfig?.extra?.authProvider || 'google';
+
+/**
+ * Returns the MiriAuth config based on the selected auth provider.
+ *
+ * Google auth: uses Google Sign-In to get an ID token, then exchanges it
+ * via Miri's token exchange endpoint.
+ *
+ * Firebase auth: uses your app's existing Firebase Authentication to get
+ * an ID token, then exchanges it. Set FIREBASE_PROJECT_ID to your Firebase
+ * project ID (from google-services.json or GoogleService-Info.plist).
+ */
+function useMiriAuth(token: string | null): MiriAuth {
+  return useMemo(() => {
+    if (AUTH_PROVIDER === 'firebase') {
+      return {
+        token,
+        provider: 'firebase' as const,
+        config: {
+          project_id: FIREBASE_PROJECT_ID,
+        },
+      };
+    }
+
+    // Default: Google auth
+    return {
+      token,
+      provider: 'google' as const,
+      config: {
+        client_id: GOOGLE_IOS_CLIENT_ID,
+        issuer_url: 'https://www.googleapis.com/oauth2/v3/certs',
+      },
+    };
+  }, [token]);
+}
 
 export const Main: FC = () => {
   const theme = useTheme();
   const { token } = useAuth();
+  const auth = useMiriAuth(token);
 
   if (!MIRI_API_KEY) {
     return (
@@ -40,14 +77,7 @@ export const Main: FC = () => {
     <KeyboardProvider>
       <MiriAppProvider
         apiKey={MIRI_API_KEY}
-        auth={{
-          token,
-          provider: 'google',
-          config: {
-            client_id: GOOGLE_IOS_CLIENT_ID,
-            issuer_url: 'https://www.googleapis.com/oauth2/v3/certs',
-          },
-        }}
+        auth={auth}
         scheme={scheme}
         logError={console.error}
         theme={{

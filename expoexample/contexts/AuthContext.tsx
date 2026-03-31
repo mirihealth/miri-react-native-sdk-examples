@@ -12,11 +12,13 @@ import {
 } from 'react';
 
 const GOOGLE_IOS_CLIENT_ID = Constants.expoConfig?.extra?.googleIOSClientId;
+const AUTH_PROVIDER = Constants.expoConfig?.extra?.authProvider || 'google';
 
 export interface AuthContextType {
   token: string | null;
   setToken: (token: string | null) => void;
   signout: () => Promise<void>;
+  authProvider: string;
 }
 
 GoogleSignin.configure({
@@ -28,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
   token: null,
   setToken: getNotInitializedFn('AppAuthContext', 'setIdToken'),
   signout: getNotInitializedFn('AppAuthContext', 'signout'),
+  authProvider: 'google',
 });
 
 export const useAuth = () => {
@@ -45,7 +48,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const signout = useCallback(async () => {
     try {
-      await GoogleSignin.signOut();
+      if (AUTH_PROVIDER === 'google') {
+        await GoogleSignin.signOut();
+      }
       setToken(null);
     } catch (error) {
       console.error('Error signing out:', error);
@@ -53,16 +58,22 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    const currentUser = GoogleSignin.getCurrentUser();
-    if (currentUser?.idToken) {
-      setToken(currentUser.idToken);
+    if (AUTH_PROVIDER === 'google') {
+      const currentUser = GoogleSignin.getCurrentUser();
+      if (currentUser?.idToken) {
+        setToken(currentUser.idToken);
+      }
     }
+    // For Firebase auth, the token is set externally via setToken
+    // (e.g., from Firebase Auth's onAuthStateChanged -> user.getIdToken())
   }, []);
+
   const value = useMemo(
     () => ({
       token,
       setToken,
       signout,
+      authProvider: AUTH_PROVIDER,
     }),
     [signout, token],
   );
