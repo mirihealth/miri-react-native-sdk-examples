@@ -29,7 +29,7 @@ import {
   BodyComposition,
   theme,
 } from '@miri-ai/miri-react-native';
-import { useCallback, useState } from 'react';
+import { ElementRef, useCallback, useRef, useState } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';
 
 import { useTheme } from '@react-navigation/native';
@@ -57,6 +57,7 @@ function Overview() {
     useState<BodyComposition | null>(null);
   const [selectedMeal, setSelectedMeal] = useState<Meal | undefined>();
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const checkinCardRef = useRef<ElementRef<typeof CheckinCard>>(null);
   const router = useRouter();
   const theme = useTheme();
   const { signout } = useAuth();
@@ -105,6 +106,7 @@ function Overview() {
       fetchProgress();
       fetchWeightProgress();
       fetchBodyComposition();
+      checkinCardRef.current?.reload();
     }, [
       fetchBodyComposition,
       fetchProgress,
@@ -138,7 +140,10 @@ function Overview() {
           </View>
         </View>
 
-        <CheckinCard onNavigateToChat={handleNavigateToChat} />
+        <CheckinCard
+          ref={checkinCardRef}
+          onNavigateToChat={handleNavigateToChat}
+        />
 
         <View style={styles.controls}>
           <DateSelector
