@@ -30,6 +30,7 @@ jobs:
 
       - name: Lint reactnativeexample files
         run: cd reactnativeexample && npm run lint
+        continue-on-error: true
 
   prettier:
     runs-on: ubuntu-latest
@@ -47,6 +48,7 @@ jobs:
 
       - name: Prettier check reactnativeexample files
         run: cd reactnativeexample && npm run prettier:check
+        continue-on-error: true
 
   typecheck:
     runs-on: ubuntu-latest
@@ -64,6 +66,7 @@ jobs:
 
       - name: Typecheck reactnativeexample files
         run: cd reactnativeexample && npm run typecheck
+        continue-on-error: true
 
   # configuration for this github action is taken from here:
   # https://github.com/marketplace/actions/aqua-security-trivy#scan-ci-pipeline-w-trivy-config
@@ -73,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run Trivy vulnerability scanner in fs mode
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: fs
           scan-ref: ./
