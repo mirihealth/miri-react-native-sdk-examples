@@ -115,7 +115,7 @@ function ChatTab() {
                   ? `Hello from ${activeCoach.displayName}! What would you like to talk about?`
                   : undefined
               }
-              onEndChat={() => {
+              onEndChat={async () => {
                 setModuleName(undefined);
                 setChatSessionId(undefined);
                 setSendUserMessage(undefined);
