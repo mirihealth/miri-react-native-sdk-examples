@@ -21,10 +21,14 @@ export interface AuthContextType {
   authProvider: string;
 }
 
-GoogleSignin.configure({
-  iosClientId: GOOGLE_IOS_CLIENT_ID,
-  scopes: ['profile', 'email', 'openid'],
-});
+// Only configure Google Sign-In if client ID is available
+// (not needed for Firebase phone/email auth flows)
+if (GOOGLE_IOS_CLIENT_ID) {
+  GoogleSignin.configure({
+    iosClientId: GOOGLE_IOS_CLIENT_ID,
+    scopes: ['profile', 'email', 'openid'],
+  });
+}
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
