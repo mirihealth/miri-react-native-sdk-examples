@@ -41,3 +41,7 @@ app-example
 
 # misc
 scripts
+
+# Local config with secrets
+app.local.json
+GoogleService-Info.plist
