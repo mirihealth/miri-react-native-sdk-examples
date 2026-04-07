@@ -19,10 +19,20 @@ if (Constants.expoConfig?.scheme) {
     : Constants.expoConfig?.scheme;
 }
 
-const GOOGLE_IOS_CLIENT_ID = Constants.expoConfig?.extra?.googleIOSClientId;
-const MIRI_API_KEY = Constants.expoConfig?.extra?.miriApiKey;
-const FIREBASE_PROJECT_ID = Constants.expoConfig?.extra?.firebaseProjectId;
-const AUTH_PROVIDER = Constants.expoConfig?.extra?.authProvider || 'google';
+// TODO: Read from Constants.expoConfig.extra once Expo config loading is fixed.
+// For now, read directly from app.json at build time via metro resolver.
+let appExtra: Record<string, string> = {};
+try {
+  const appJson = require('../app.json');
+  appExtra = appJson?.expo?.extra ?? {};
+} catch {
+  // fallback
+}
+
+const GOOGLE_IOS_CLIENT_ID = appExtra.googleIOSClientId;
+const MIRI_API_KEY = appExtra.miriApiKey;
+const FIREBASE_PROJECT_ID = appExtra.firebaseProjectId;
+const AUTH_PROVIDER = appExtra.authProvider || 'google';
 
 /**
  * Returns the MiriAuth config based on the selected auth provider.
