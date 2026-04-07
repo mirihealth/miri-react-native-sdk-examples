@@ -27,7 +27,6 @@ import {
   LogPicker,
   ChatSearchParams,
   BodyComposition,
-  theme,
 } from '@miri-ai/miri-react-native';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';

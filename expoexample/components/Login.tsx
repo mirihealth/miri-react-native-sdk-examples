@@ -26,14 +26,17 @@ export const Login = () => {
     } catch (err: any) {
       const message = err?.message || String(err);
 
-      if (message.includes('GIDClientID') || message.includes('No active configuration')) {
+      if (
+        message.includes('GIDClientID') ||
+        message.includes('No active configuration')
+      ) {
         setError(
           '⚠️ Google Sign-In is not configured.\n\n' +
-          'To fix this:\n' +
-          '1. Download GoogleService-Info.plist from Firebase Console (with Google Sign-In enabled)\n' +
-          '2. Place it in the project root\n' +
-          '3. Set googleIOSClientId in app.json extra\n' +
-          '4. Run: npx expo prebuild --clean && npx expo run:ios'
+            'To fix this:\n' +
+            '1. Download GoogleService-Info.plist from Firebase Console (with Google Sign-In enabled)\n' +
+            '2. Place it in the project root\n' +
+            '3. Set googleIOSClientId in app.json extra\n' +
+            '4. Run: npx expo prebuild --clean && npx expo run:ios',
         );
       } else if (message.includes('SIGN_IN_CANCELLED')) {
         // User cancelled
@@ -61,9 +64,7 @@ export const Login = () => {
           onPress={onLoginPress}
         />
 
-        {error && (
-          <Text style={styles.errorText}>{error}</Text>
-        )}
+        {error && <Text style={styles.errorText}>{error}</Text>}
 
         <Pressable
           style={styles.devToggle}
