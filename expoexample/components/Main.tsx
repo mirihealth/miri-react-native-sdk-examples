@@ -19,8 +19,8 @@ if (Constants.expoConfig?.scheme) {
     : Constants.expoConfig?.scheme;
 }
 
-// TODO: Read from Constants.expoConfig.extra once Expo config loading is fixed.
-// For now, read directly from app.json at build time via metro resolver.
+// Constants.expoConfig?.extra doesn't resolve reliably in prebuild dev clients (Expo SDK 55).
+// Reading app.json directly via require() works in all environments. Revert to Constants.expoConfig.extra in SDK 56+.
 let appExtra: Record<string, string> = {};
 try {
   const appJson = require('../app.json');

@@ -76,3 +76,8 @@ yarn-error.log
 
 # misc
 scripts/
+
+# Local config with secrets
+GoogleService-Info.plist
+app.local.json
+.env.local

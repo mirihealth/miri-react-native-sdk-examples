@@ -4,8 +4,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   Button,
