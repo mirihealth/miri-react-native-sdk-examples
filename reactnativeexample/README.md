@@ -8,7 +8,7 @@ You'll need a Miri API Key and a [Google OAuth Client for IOS](https://support.g
 
 Once you have those, create a .env file in this directory and add `GOOGLE_IOS_CLIENT_ID` and `MIRI_API_KEY` to it. E.g.:
 
-````
+```
 GOOGLE_IOS_CLIENT_ID=<Google OAuth Client ID>
 MIRI_API_KEY=<Your Miri API Key>
 ```
@@ -36,5 +36,5 @@ To add the IOS Url scheme, see [these docs](https://react-native-google-signin.g
    ```
 
 4. Running on device
+
    Check out the [React Native](https://reactnative.dev/docs/running-on-device) docs
-````

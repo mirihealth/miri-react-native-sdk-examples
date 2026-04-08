@@ -31,5 +31,15 @@ target 'reactnativeexample' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 26 ships a Clang that breaks fmt's consteval usage.
+    # Patch the header to force all FMT_USE_CONSTEVAL=1 to =0.
+    # https://github.com/facebook/react-native/issues/55601
+    fmt_base = File.join(__dir__, 'Pods', 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base)
+      content = File.read(fmt_base)
+      patched = content.gsub('FMT_USE_CONSTEVAL 1', 'FMT_USE_CONSTEVAL 0')
+      File.write(fmt_base, patched) if patched != content
+    end
   end
 end

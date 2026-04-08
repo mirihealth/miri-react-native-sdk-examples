@@ -81,5 +81,4 @@ jobs:
           scan-type: fs
           scan-ref: ./
           exit-code: 1
-          format: json
-          skip-dirs: ./examples
+          format: table

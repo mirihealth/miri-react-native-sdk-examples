@@ -4,13 +4,7 @@ const { getDefaultConfig } = require('expo/metro-config');
 const config = getDefaultConfig(__dirname);
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  const defaultResolveResult = context.resolveRequest(
-    context,
-    moduleName,
-    platform,
-  );
-
-  // react-native-linear-gradient
+  // react-native-linear-gradient → expo-linear-gradient
   if (moduleName === 'react-native-linear-gradient') {
     return {
       filePath: require.resolve('expo-linear-gradient'),
@@ -28,7 +22,7 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
     return { type: 'empty' };
   }
 
-  return defaultResolveResult;
+  return context.resolveRequest(context, moduleName, platform);
 };
 
 // Expo 53 workaround

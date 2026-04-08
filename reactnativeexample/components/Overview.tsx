@@ -21,7 +21,7 @@ import {
 } from '@miri-ai/miri-react-native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation, useTheme } from '@react-navigation/native';
-import { useCallback, useEffect, useState } from 'react';
+import { ElementRef, useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -53,6 +53,7 @@ function Overview() {
   const [isWeightProgressLoading, setIsWeightProgressLoading] = useState(true);
   const [bodyComposition, setBodyComposition] =
     useState<BodyComposition | null>(null);
+  const checkinCardRef = useRef<ElementRef<typeof CheckinCard>>(null);
   const [selectedMeal, setSelectedMeal] = useState<Meal | undefined>();
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const navigation =
@@ -100,6 +101,7 @@ function Overview() {
     fetchProgress();
     fetchWeightProgress();
     fetchBodyComposition();
+    checkinCardRef.current?.reload();
   }, [
     fetchTodaysMeals,
     fetchProgress,
@@ -138,7 +140,10 @@ function Overview() {
           </View>
         </View>
 
-        <CheckinCard onNavigateToChat={handleNavigateToChat} />
+        <CheckinCard
+          ref={checkinCardRef}
+          onNavigateToChat={handleNavigateToChat}
+        />
 
         <View style={styles.controls}>
           <DateSelector

@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { useColorScheme } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Main } from './components/Main';
 import { AuthProvider } from './contexts/AuthContext';
@@ -13,22 +14,24 @@ import { AuthProvider } from './contexts/AuthContext';
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
   return (
-    <ThemeProvider
-      value={
-        colorScheme === 'dark'
-          ? DarkTheme
-          : {
-              ...DefaultTheme,
-              colors: { ...DefaultTheme.colors, background: 'white' },
-            }
-      }
-    >
-      <AuthProvider>
-        <KeyboardProvider>
-          <Main />
-        </KeyboardProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider
+        value={
+          colorScheme === 'dark'
+            ? DarkTheme
+            : {
+                ...DefaultTheme,
+                colors: { ...DefaultTheme.colors, background: 'white' },
+              }
+        }
+      >
+        <AuthProvider>
+          <KeyboardProvider>
+            <Main />
+          </KeyboardProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 

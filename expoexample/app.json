@@ -8,10 +8,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shekharmiri.expoexample"
+      "bundleIdentifier": "com.miri.sdk-test"
     },
     "android": {
       "adaptiveIcon": {
@@ -43,8 +42,20 @@
         }
       ],
       "expo-web-browser",
-      "expo-font"
+      "expo-font",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.YOUR_REVERSED_CLIENT_ID"
+        }
+      ]
     ],
+    "extra": {
+      "miriApiKey": "YOUR_MIRI_API_KEY",
+      "googleIOSClientId": "YOUR_GOOGLE_IOS_CLIENT_ID",
+      "firebaseProjectId": "YOUR_FIREBASE_PROJECT_ID",
+      "authProvider": "google"
+    },
     "experiments": {
       "typedRoutes": true
     }
