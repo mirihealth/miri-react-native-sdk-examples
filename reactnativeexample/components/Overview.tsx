@@ -23,7 +23,6 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { ElementRef, useCallback, useEffect, useRef, useState } from 'react';
 import {
-  FlatList,
   KeyboardAvoidingView,
   Modal,
   ScrollView,
