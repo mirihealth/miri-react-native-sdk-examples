@@ -26,6 +26,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Modal,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -140,6 +141,7 @@ function Overview() {
           </View>
         </View>
 
+        <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <CheckinCard
           ref={checkinCardRef}
           onNavigateToChat={handleNavigateToChat}
@@ -177,17 +179,13 @@ function Overview() {
           <View>
             <Text style={styles.mealListHeader}>Today's Meals</Text>
           </View>
-          <FlatList
-            data={[{ key: 'content' }]}
-            renderItem={() => (
-              <MealList
-                meals={meals}
-                isLoading={areMealsLoading}
-                onMealPress={(meal) => setSelectedMeal(meal)}
-                allowDelete
-              />
-            )}
+          <MealList
+            meals={meals}
+            isLoading={areMealsLoading}
+            onMealPress={(meal) => setSelectedMeal(meal)}
+            allowDelete
           />
+        </View>
           {weightProgress && (
             <View style={styles.pickerBar}>
               <FIOPicker onNavigateToChat={handleNavigateToChat} />
@@ -199,6 +197,7 @@ function Overview() {
               />
             </View>
           )}
+        </ScrollView>
           <Modal
             visible={selectedMeal !== undefined}
             transparent
@@ -247,7 +246,6 @@ function Overview() {
               </SafeAreaView>
             </SafeAreaProvider>
           </Modal>
-        </View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -258,6 +256,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   innerContainer: {
+    flex: 1,
+  },
+  scrollContent: {
     flex: 1,
   },
   intro: {
