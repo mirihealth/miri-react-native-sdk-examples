@@ -80,4 +80,6 @@ scripts/
 # Local config with secrets
 GoogleService-Info.plist
 app.local.json
+.env
 .env.local
+!.env.example

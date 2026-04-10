@@ -1,4 +1,4 @@
-import { GOOGLE_IOS_CLIENT_ID } from '@env';
+import { GOOGLE_IOS_CLIENT_ID, AUTH_PROVIDER } from '@env';
 import { getNotInitializedFn } from '@miri-ai/miri-react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {
@@ -11,21 +11,29 @@ import {
   useState,
 } from 'react';
 
+const authProvider = AUTH_PROVIDER || 'google';
+
 export interface AuthContextType {
   token: string | null;
   setToken: (token: string | null) => void;
   signout: () => Promise<void>;
+  authProvider: string;
 }
 
-GoogleSignin.configure({
-  iosClientId: GOOGLE_IOS_CLIENT_ID,
-  scopes: ['profile', 'email', 'openid'],
-});
+// Only configure Google Sign-In if client ID is available
+// (not needed for Firebase phone/email auth flows)
+if (GOOGLE_IOS_CLIENT_ID) {
+  GoogleSignin.configure({
+    iosClientId: GOOGLE_IOS_CLIENT_ID,
+    scopes: ['profile', 'email', 'openid'],
+  });
+}
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
   setToken: getNotInitializedFn('AppAuthContext', 'setIdToken'),
   signout: getNotInitializedFn('AppAuthContext', 'signout'),
+  authProvider: 'google',
 });
 
 export const useAuth = () => {
@@ -43,7 +51,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const signout = useCallback(async () => {
     try {
-      await GoogleSignin.signOut();
+      if (authProvider === 'google') {
+        await GoogleSignin.signOut();
+      }
       setToken(null);
     } catch (error) {
       console.error('Error signing out:', error);
@@ -51,10 +61,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    const currentUser = GoogleSignin.getCurrentUser();
-    if (currentUser?.idToken) {
-      setToken(currentUser.idToken);
+    if (authProvider === 'google') {
+      const currentUser = GoogleSignin.getCurrentUser();
+      if (currentUser?.idToken) {
+        setToken(currentUser.idToken);
+      }
     }
+    // For Firebase auth, the token is set externally via setToken
+    // (e.g., from Firebase Auth's onAuthStateChanged -> user.getIdToken())
   }, []);
 
   const value = useMemo(
@@ -62,6 +76,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       token,
       setToken,
       signout,
+      authProvider,
     }),
     [signout, token],
   );
