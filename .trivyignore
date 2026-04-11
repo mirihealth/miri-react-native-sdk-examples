@@ -11,3 +11,6 @@ CVE-2026-26996
 CVE-2026-27903
 CVE-2026-27904
 CVE-2026-33671
+
+# socket.io-parser — transitive dev dep from metro/jest, not used at runtime
+CVE-2026-33151
