@@ -29,7 +29,6 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@shopify/react-native-skia": "2.4.18",
-    "axios": "^1.15.0",
     "expo": "~55.0.14",
     "expo-application": "~55.0.14",
     "expo-blur": "~55.0.14",

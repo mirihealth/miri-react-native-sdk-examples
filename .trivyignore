@@ -1,0 +1,13 @@
+# axios CVE — transitive dep from @miri-ai/miri-react-native SDK, fix requires SDK publish
+CVE-2025-62718
+CVE-2026-40175
+
+# ruby gem CVEs — from CocoaPods Podfile.lock, managed by upstream pod versions
+CVE-2026-35611
+CVE-2025-27788
+
+# minimatch / picomatch — transitive dev deps, not exploitable in app runtime
+CVE-2026-26996
+CVE-2026-27903
+CVE-2026-27904
+CVE-2026-33671
