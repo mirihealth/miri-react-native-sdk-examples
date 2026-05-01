@@ -76,3 +76,9 @@ See the [README](/expoexample/README.md) for this example.
 A bare [React Native](https://reactnative.dev/) example app showing a sample implementation for the `@miri-ai/miri-react-native` SDK.
 
 See the [README](/reactnativeexample/README.md) for this example.
+
+## Multi-Program Example
+
+A second bare [React Native](https://reactnative.dev/) example app focused on the **multi-program SKU** (GLP-1 / weight-management) surfaces. Demonstrates the four-tab Today / Progress / Log / Coach layout, GLP-1 weight progress card with inline chart, server-driven coach chips, and the `LogPickerV2` + `ScanFoodModal` 4-tile meal-logging hub.
+
+See the [README](/multiprogramexample/README.md) for this example.

@@ -1,5 +1,5 @@
 {
-  "name": "reactnativeexample",
+  "name": "multiprogramexample",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@kingstinct/react-native-healthkit": "^13.4.0",
-    "@miri-ai/miri-react-native": "^1.202.14",
+    "@miri-ai/miri-react-native": "^1.220.0",
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/blur": "^4.4.1",
     "@react-native-community/datetimepicker": "^8.3.0",
