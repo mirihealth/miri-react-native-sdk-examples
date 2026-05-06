@@ -80,21 +80,27 @@ export const MiriCoachShell: FC = () => {
   }
 
   return (
-    <MiriAppProvider
-      apiKey={MIRI_API_KEY}
-      auth={auth}
-      userAgentPrefix="nutritionistexample/1.0"
-      env="staging"
-      scheme="example"
-      logError={console.error}
-      theme={miriTheme}
-    >
-      {token ? <MiriTabs /> : <Login />}
-    </MiriAppProvider>
+    <SafeAreaView style={styles.miriShell} edges={['top']}>
+      <MiriAppProvider
+        apiKey={MIRI_API_KEY}
+        auth={auth}
+        userAgentPrefix="nutritionistexample/1.0"
+        env="staging"
+        scheme="example"
+        logError={console.error}
+        theme={miriTheme}
+      >
+        {token ? <MiriTabs /> : <Login />}
+      </MiriAppProvider>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  miriShell: {
+    flex: 1,
+    backgroundColor: partnerColors.surface,
+  },
   errorWrapper: {
     flex: 1,
     backgroundColor: partnerColors.surface,

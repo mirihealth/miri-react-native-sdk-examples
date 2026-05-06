@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Chat } from './Chat';
 import { Coach } from './Coach';
 import { Log } from './Log';
+import { partnerColors } from './partnerTheme';
 import { Progress } from './Progress';
 import { Today } from './Today';
 import { BottomTabParamList } from './types';
@@ -62,7 +63,24 @@ export const MiriTabs: FC = () => {
     <TabNavigator.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { backgroundColor: 'white' },
+        // Sub-nav styling: smaller height + tighter typography than the
+        // partner's outer tab bar, plus the partner palette so the two
+        // bars feel like nested layers of the Coach tab rather than two
+        // unrelated nav rows. Partner accent is used for the active tint
+        // so colors stay consistent across both bars.
+        tabBarStyle: {
+          backgroundColor: partnerColors.surface,
+          borderTopColor: partnerColors.border,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          height: 56,
+          paddingTop: 6,
+          paddingBottom: 6,
+          elevation: 0,
+        },
+        tabBarActiveTintColor: partnerColors.primary,
+        tabBarInactiveTintColor: partnerColors.textMuted,
+        tabBarLabelStyle: { fontSize: 10, fontWeight: '500' },
+        tabBarIconStyle: { marginTop: 2 },
       }}
     >
       <TabNavigator.Screen
