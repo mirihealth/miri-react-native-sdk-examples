@@ -18,6 +18,28 @@ Miri's own bottom-tab nav (Today / Progress / Log / Coach) just above it.
 Both nav bars are simultaneously on screen — so the integration boundary
 is visually explicit, and the user understands which surface they're on.
 
+## Screenshots
+
+### Partner-owned tabs (mocked)
+
+| Schedule | Refills | Account |
+|---|---|---|
+| ![Schedule](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/01-schedule.png) | ![Refills](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/02-refills.png) | ![Account](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/03-account.png) |
+
+### Coach tab — Miri Login (partner nav still at bottom)
+
+![Coach login](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/04-coach-login.png)
+
+### Coach tab — full Miri experience with both nav bars stacked
+
+| Today | Progress | Log | Coach |
+|---|---|---|---|
+| ![Today](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/05-miri-today.png) | ![Progress](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/06-miri-progress.png) | ![Log](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/07-miri-log.png) | ![Miri Coach](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/08-miri-coach.png) |
+
+Each screenshot shows Miri's bottom-tab nav stacked directly above the
+partner's bottom-tab nav, with **Coach** highlighted (leaf icon) on the
+partner side.
+
 ## Architecture
 
 ```
