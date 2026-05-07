@@ -26,10 +26,6 @@ is visually explicit, and the user understands which surface they're on.
 |---|---|---|
 | ![Schedule](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/01-schedule.png) | ![Refills](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/02-refills.png) | ![Account](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/03-account.png) |
 
-### Coach tab — Miri Login (partner nav still at bottom)
-
-![Coach login](https://raw.githubusercontent.com/mirihealth/miri-react-native-sdk-examples/screenshots/nutritionist-example/04-coach-login.png)
-
 ### Coach tab — full Miri experience with both nav bars stacked
 
 | Today | Progress | Log | Coach |
