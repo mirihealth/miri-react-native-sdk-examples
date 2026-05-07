@@ -1,3 +1,7 @@
+// NOTE: The console.error calls below log to the JS console for example-app
+// readability. In a real partner app, swap them for your own logger and scrub
+// any token/PII fields before sending off-device.
+
 import { useAuth } from '@/contexts/AuthContext';
 import { firebaseAuth } from '@/services/firebase';
 import { Text, useAuthVerificationAPI } from '@miri-ai/miri-react-native';
@@ -112,30 +116,36 @@ export const Login = () => {
           </Text>
         </Pressable>
 
-        <Pressable
-          style={styles.devToggle}
-          onPress={() => setShowDevLogin(!showDevLogin)}
-        >
-          <Text style={styles.devToggleText}>
-            {showDevLogin ? 'Hide' : 'Dev Login (paste token)'}
-          </Text>
-        </Pressable>
-
-        {showDevLogin && (
+        {/* Paste-token backdoor — `__DEV__`-gated so customers forking this
+            example don't inherit the affordance in production builds. */}
+        {__DEV__ && (
           <>
-            <TextInput
-              style={styles.tokenInput}
-              placeholder="Paste Firebase ID token or Google ID token..."
-              value={devToken}
-              onChangeText={setDevToken}
-              multiline
-              numberOfLines={3}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-            <Pressable style={styles.devButton} onPress={onDevLogin}>
-              <Text style={styles.devButtonText}>Sign In with Token</Text>
+            <Pressable
+              style={styles.devToggle}
+              onPress={() => setShowDevLogin(!showDevLogin)}
+            >
+              <Text style={styles.devToggleText}>
+                {showDevLogin ? 'Hide' : 'Dev Login (paste token)'}
+              </Text>
             </Pressable>
+
+            {showDevLogin && (
+              <>
+                <TextInput
+                  style={styles.tokenInput}
+                  placeholder="Paste Firebase ID token or Google ID token..."
+                  value={devToken}
+                  onChangeText={setDevToken}
+                  multiline
+                  numberOfLines={3}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                <Pressable style={styles.devButton} onPress={onDevLogin}>
+                  <Text style={styles.devButtonText}>Sign In with Token</Text>
+                </Pressable>
+              </>
+            )}
           </>
         )}
       </ScrollView>

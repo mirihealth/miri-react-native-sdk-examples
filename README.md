@@ -82,3 +82,11 @@ See the [README](/reactnativeexample/README.md) for this example.
 A second bare [React Native](https://reactnative.dev/) example app focused on the **multi-program SKU** (GLP-1 / weight-management) surfaces. Demonstrates the four-tab Today / Progress / Log / Coach layout, GLP-1 weight progress card with inline chart, server-driven coach chips, and the `LogPickerV2` + `ScanFoodModal` 4-tile meal-logging hub.
 
 See the [README](/multiprogramexample/README.md) for this example.
+
+## Nutritionist (Partner Integration) Example
+
+A bare [React Native](https://reactnative.dev/) example showing how a partner ships **their own branded patient app** with Miri embedded behind a single tab. The fictional customer is **NutriPath**, an EHR for nutritionists; their app has its own Schedule / Refills / Account tabs plus a **Coach** tab that mounts the full Miri experience. Both nav bars stay visible at the same time, making the integration boundary visually explicit.
+
+This is the canonical "how do I embed Miri in my existing app?" reference for partners.
+
+See the [README](/nutritionistexample/README.md) for this example.
