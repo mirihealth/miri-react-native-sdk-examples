@@ -1,6 +1,10 @@
 # axios CVE — transitive dep from @miri-ai/miri-react-native SDK, fix requires SDK publish
 CVE-2025-62718
 CVE-2026-40175
+CVE-2026-42033
+CVE-2026-42035
+CVE-2026-42043
+CVE-2026-42264
 
 # ruby gem CVEs — from CocoaPods Podfile.lock, managed by upstream pod versions
 CVE-2026-35611
