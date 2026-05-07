@@ -99,7 +99,7 @@ export const Chat: FC<BottomTabScreenProps<BottomTabParamList, 'Chat'>> = ({
         </View>
       )}
 
-      {activeCoach && moduleName && (
+      {moduleName && (
         <View style={styles.chat}>
           <View style={styles.header}>
             <Pressable onPress={() => setModuleName(undefined)}>
@@ -115,7 +115,7 @@ export const Chat: FC<BottomTabScreenProps<BottomTabParamList, 'Chat'>> = ({
             messageContext={messageContext}
             introMessage={
               moduleName === ModuleNames.QUICKSTART
-                ? `Hello from ${activeCoach.displayName}! What would you like to talk about?`
+                ? `Hello from ${activeCoach?.displayName ?? 'your coach'}! What would you like to talk about?`
                 : undefined
             }
             onEndChat={async () => setModuleName(undefined)}

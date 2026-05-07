@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // Internal-test phone number — server bypasses real SMS verification for
 // any +1555... number on alpha/beta builds and accepts the OTP "51010".
 // See miri-server/README.md → "Internal Testing".
-const DEV_PHONE_NUMBER = '+15559999794';
+const DEV_PHONE_NUMBER = '+15559999795';
 const DEV_VERIFICATION_CODE = '51010';
 
 export const Login = () => {

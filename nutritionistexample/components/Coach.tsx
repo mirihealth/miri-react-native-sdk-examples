@@ -89,9 +89,15 @@ export const Coach: FC = () => {
 
   const handleChipPress = useCallback(
     (chip: CoachChip) => {
-      if (!program?.id) return;
+      // Prefix with the program id when we have one (matches multi-program
+      // routing convention). When the user has no program assigned — common
+      // for the dev test phone — fall back to the bare module name so the
+      // Chat tab still opens.
+      const moduleName = program?.id
+        ? `${program.id}/${chip.module_name}`
+        : chip.module_name;
       navigation.navigate('Chat', {
-        moduleName: `${program.id}/${chip.module_name}`,
+        moduleName,
         sendUserMessage: chip.prompt_text,
       });
     },
