@@ -87,6 +87,14 @@ See the [README](/multiprogramexample/README.md) for this example.
 
 A bare [React Native](https://reactnative.dev/) example showing how a partner ships **their own branded patient app** with Miri embedded behind a single tab. The fictional customer is **NutriPath**, an EHR for nutritionists; their app has its own Schedule / Refills / Account tabs plus a **Coach** tab that mounts the full Miri experience. Both nav bars stay visible at the same time, making the integration boundary visually explicit.
 
-This is the canonical "how do I embed Miri in my existing app?" reference for partners.
+This is the canonical "how do I embed Miri behind a single tab?" reference for partners.
 
 See the [README](/nutritionistexample/README.md) for this example.
+
+## GLP-1 Partner Integration Example
+
+A bare [React Native](https://reactnative.dev/) example showing the **other** partner-integration pattern: Miri components woven **inline** across the partner's own screens, rather than tucked behind a single tab. The fictional customer is **MetaPath Health**, a virtual GLP-1 clinic; their app has Home / Meds / Care / Account tabs with Miri's progress, coaching, and chip-rail components dropped directly inside Home and Meds, plus the SDK's `LogPickerV2` mounted in a center "+" tab-bar slot.
+
+This is the canonical "how do I embed Miri components alongside my own clinical UI?" reference — the right pattern for partners whose patients open the app for clinical context (dose schedule, visits, labs) and need coaching to meet them there rather than waiting in a separate tab.
+
+See the [README](/glp1partnerexample/README.md) for this example.
