@@ -63,10 +63,10 @@ export const MetaPathRoot: FC = () => {
     );
   }
 
-  if (!token) {
-    return <Login />;
-  }
-
+  // MiriAppProvider is mounted unconditionally so the Login screen can use
+  // SDK auth hooks (`useAuthVerificationAPI`) before a token exists. When
+  // `auth.token` is null, the SDK is initialised but unauthenticated;
+  // requests that require auth wait until the token is set.
   return (
     <MiriAppProvider
       apiKey={MIRI_API_KEY}
@@ -74,10 +74,15 @@ export const MetaPathRoot: FC = () => {
       userAgentPrefix="glp1partnerexample/1.0"
       env="staging"
       scheme="example"
-      logError={console.error}
+      logError={(...args) => {
+        // Use console.log (not console.error) so SDK errors during the
+        // initial auth race don't trigger dev redboxes / yellow boxes
+        // — partner apps would route to their own logger here.
+        if (__DEV__) console.log('[Miri]', ...args);
+      }}
       theme={miriThemeForPartner}
     >
-      <RootNavigator />
+      {token ? <RootNavigator /> : <Login />}
     </MiriAppProvider>
   );
 };

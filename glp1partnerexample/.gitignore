@@ -83,3 +83,6 @@ app.local.json
 .env
 .env.local
 !.env.example
+
+# Local SDK tarball used by smoke-test workflow
+_sdk.tgz

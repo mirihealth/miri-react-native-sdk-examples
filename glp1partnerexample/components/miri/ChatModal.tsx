@@ -6,7 +6,9 @@
 // with momentum, not a blank input field.
 
 import {
+  ChatInput,
   ChevronLeftIcon,
+  MessagesList,
   Chat as MiriChat,
   ModuleNames,
   toTitleCase,
@@ -72,7 +74,12 @@ export const ChatModal: FC<Props> = ({ route, navigation }) => {
               ? `Hi from ${activeCoach.displayName}. What can I help you with today?`
               : undefined
           }
-        />
+          onEndChat={async () => navigation.goBack()}
+          endChatLabel="Close"
+        >
+          <MessagesList />
+          <ChatInput />
+        </MiriChat>
       </View>
     </SafeAreaView>
   );
