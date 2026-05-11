@@ -1,16 +1,41 @@
-// Care — 100% partner, no Miri components. Visits, messages, lab results.
-// Patients on GLP-1 are seeing prescribers regularly; this tab is the
-// clinical-care surface and intentionally Miri-free. Showing the boundary
-// is part of the demo: not every partner surface needs the SDK.
+// Care — consolidated clinical surface. Visits, medication, messages, labs.
+//
+// Absorbs the old Meds tab's content (Rx card + weekly adherence strip +
+// refill timeline) into a single "your clinical care" hub. The patient no
+// longer needs two tabs for clinical context — Care holds all of it, and
+// the Home tab focuses on today's actions (quick check-in, weight chart,
+// coaching).
+//
+// Layout (clinical priority order):
+//   1. Upcoming visits  (next telehealth)
+//   2. Medication       (Rx card + adherence strip + refill)
+//   3. Messages         (prescriber + pharmacy)
+//   4. Recent labs
+//   5. Past visits
+//
+// 100% partner-styled (no Miri components) — Care intentionally
+// demonstrates the boundary: clinical-of-record surfaces don't need to be
+// SDK-powered.
 
 import { FC } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { LabSnippet } from './partner/LabSnippet';
-import { VisitCard } from './partner/VisitCard';
-import { partnerColors } from './partnerTheme';
+import { RefillCard } from './partner/RefillCard';
 import { SectionHeader } from './partner/SectionHeader';
+import { VisitCard } from './partner/VisitCard';
+import { PARTNER_BRAND, partnerColors } from './partnerTheme';
+
+const ADHERENCE = [
+  { day: 'M', taken: true },
+  { day: 'T', taken: true },
+  { day: 'W', taken: true },
+  { day: 'T', taken: true },
+  { day: 'F', taken: true },
+  { day: 'S', taken: true },
+  { day: 'S', taken: false, isToday: true },
+];
 
 const PAST_VISITS = [
   {
@@ -47,13 +72,72 @@ export const Care: FC = () => (
       <View style={styles.headerBlock}>
         <Text style={styles.h1}>Care</Text>
         <Text style={styles.subtitle}>
-          Visits, messages, and lab results from your team
+          Visits, medication, and lab results from your team
         </Text>
       </View>
 
       <View style={styles.section}>
         <SectionHeader>Upcoming visits</SectionHeader>
         <VisitCard />
+      </View>
+
+      <View style={styles.section}>
+        <SectionHeader>Medication</SectionHeader>
+        <View style={styles.medGroup}>
+          {/* Active prescription */}
+          <View style={styles.rxCard}>
+            <View style={styles.rxRow}>
+              <Text style={styles.rxIcon}>💉</Text>
+              <View style={styles.rxBody}>
+                <Text style={styles.rxName}>
+                  {PARTNER_BRAND.medication.name} {PARTNER_BRAND.medication.dose}
+                </Text>
+                <Text style={styles.rxDetail}>
+                  {PARTNER_BRAND.medication.route} ·{' '}
+                  {PARTNER_BRAND.medication.frequency}
+                </Text>
+                <Text style={styles.rxPrescriber}>
+                  Prescribed by {PARTNER_BRAND.prescriber}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.rxFooter}>
+              <Text style={styles.rxFooterLabel}>NEXT DOSE</Text>
+              <Text style={styles.rxFooterValue}>Tomorrow at 8:00 AM</Text>
+            </View>
+          </View>
+
+          {/* 7-day adherence */}
+          <View style={styles.adherenceCard}>
+            <Text style={styles.adherenceLabel}>This week</Text>
+            <View style={styles.adherenceRow}>
+              {ADHERENCE.map((d, i) => (
+                <View key={i} style={styles.adherenceDay}>
+                  <View
+                    style={[
+                      styles.adherenceDot,
+                      d.taken && styles.adherenceDotTaken,
+                      d.isToday && styles.adherenceDotToday,
+                    ]}
+                  >
+                    {d.taken && <Text style={styles.adherenceCheck}>✓</Text>}
+                  </View>
+                  <Text
+                    style={[
+                      styles.adherenceDayLabel,
+                      d.isToday && styles.adherenceDayLabelToday,
+                    ]}
+                  >
+                    {d.day}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Refill timeline */}
+          <RefillCard />
+        </View>
       </View>
 
       <View style={styles.section}>
@@ -116,6 +200,113 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   section: { gap: 10 },
+  medGroup: {
+    paddingHorizontal: 16,
+    gap: 10,
+  },
+  rxCard: {
+    backgroundColor: partnerColors.surfaceElevated,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: partnerColors.border,
+    overflow: 'hidden',
+  },
+  rxRow: {
+    flexDirection: 'row',
+    gap: 12,
+    padding: 16,
+  },
+  rxIcon: { fontSize: 28 },
+  rxBody: { flex: 1 },
+  rxName: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: partnerColors.text,
+  },
+  rxDetail: {
+    fontSize: 13,
+    color: partnerColors.textMuted,
+    marginTop: 2,
+  },
+  rxPrescriber: {
+    fontSize: 12,
+    color: partnerColors.textSubtle,
+    marginTop: 4,
+  },
+  rxFooter: {
+    backgroundColor: partnerColors.primarySoft,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  rxFooterLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    color: partnerColors.primary,
+  },
+  rxFooterValue: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: partnerColors.primary,
+  },
+  adherenceCard: {
+    backgroundColor: partnerColors.surfaceElevated,
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: partnerColors.border,
+  },
+  adherenceLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: partnerColors.textMuted,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    marginBottom: 12,
+  },
+  adherenceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  adherenceDay: {
+    alignItems: 'center',
+    gap: 6,
+  },
+  adherenceDot: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: partnerColors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: partnerColors.surface,
+  },
+  adherenceDotTaken: {
+    backgroundColor: partnerColors.success,
+    borderColor: partnerColors.success,
+  },
+  adherenceDotToday: {
+    borderColor: partnerColors.accent,
+    borderWidth: 2,
+  },
+  adherenceCheck: {
+    color: partnerColors.surfaceElevated,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  adherenceDayLabel: {
+    fontSize: 11,
+    color: partnerColors.textSubtle,
+    fontWeight: '600',
+  },
+  adherenceDayLabelToday: {
+    color: partnerColors.accent,
+    fontWeight: '700',
+  },
   messagesList: {
     paddingHorizontal: 16,
     gap: 8,

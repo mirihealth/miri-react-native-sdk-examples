@@ -13,7 +13,7 @@ export interface ChatModalParams {
 
 export type PartnerTabParamList = {
   Home: undefined;
-  Meds: undefined;
+  Progress: undefined;
   Care: undefined;
   Account: undefined;
 };

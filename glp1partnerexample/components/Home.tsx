@@ -1,32 +1,38 @@
-// Home — MetaPath's primary daily surface. The integration showcase.
+// Home — MetaPath's primary daily surface, refactored around "today's
+// actions" rather than clinical context.
 //
 // Top-to-bottom layout:
-//   1. Partner greeting + day counter
-//   2. PARTNER: DoseCard         — high-trust clinical context anchor
-//   3. MIRI:    HomeProgressBlock (BodyStatsProgress + KeySignalsRow)
-//   4. MIRI:    HomeCoachingBlock (PriorityActionCard + InsightCard +
-//               CoachChipRail)
-//   5. PARTNER: VisitCard, RefillCard, LabSnippet  (Upcoming section)
+//   1. Greeting + day counter            (partner)
+//   2. Quick check-in                    (MIRI — 4 cards: medication,
+//                                          mood, symptoms, movement)
+//   3. Weight chart                      (MIRI — 7-day trend with goal
+//                                          projection)
+//   4. KeySignalsRow                     (MIRI — 3-stat lever pills)
+//   5. Coaching block                    (MIRI — PriorityActionCard +
+//                                          InsightCard + CoachChipRail)
 //
-// Reading order is deliberate: dose (clinical authority) → progress
-// (Miri inherits that authority because it's adjacent) → coaching
-// (the answer to "why is my progress what it is + what should I do
-// today") → upcoming (operational housekeeping). The patient's
-// attention flows clinical → behavioural → operational, mirroring
-// how care actually works.
+// Clinical-of-record context (Rx, refill, visits, labs) lives on Care,
+// not here. Home is the daily-action surface: log first, see trend,
+// see coaching. The patient lands here every morning and either
+// completes the check-in or sees what their coach said overnight.
 
-import { useCareSeeker } from '@miri-ai/miri-react-native';
-import { FC } from 'react';
+import {
+  useCareSeeker,
+  useMiriApp,
+  useWellnessScore,
+  KeySignalsRow,
+  type BodyComposition,
+  type PlanArtifactWeight,
+  type WeightTracking,
+} from '@miri-ai/miri-react-native';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { HomeCoachingBlock } from './miri/HomeCoachingBlock';
-import { HomeProgressBlock } from './miri/HomeProgressBlock';
-import { DoseCard } from './partner/DoseCard';
-import { LabSnippet } from './partner/LabSnippet';
-import { RefillCard } from './partner/RefillCard';
+import { HomeQuickCheckInBlock } from './miri/HomeQuickCheckInBlock';
+import { HomeWeightChart } from './miri/HomeWeightChart';
 import { SectionHeader } from './partner/SectionHeader';
-import { VisitCard } from './partner/VisitCard';
 import { PARTNER_BRAND, partnerColors } from './partnerTheme';
 
 function getTimeOfDayGreeting(): string {
@@ -38,13 +44,34 @@ function getTimeOfDayGreeting(): string {
 
 export const Home: FC = () => {
   const { careSeeker } = useCareSeeker();
+  const { getWeightProgress, getBodyComposition } = useMiriApp();
+  const { data: wellnessScore } = useWellnessScore();
+
   const firstName =
     careSeeker?.displayName?.trim().split(/\s+/)[0] ||
     PARTNER_BRAND.patientFirstName;
-  // The day counter is purely cosmetic — real partners would compute
-  // from program enrollment. Hard-coded here to keep the example self-
-  // contained.
+  // Cosmetic — real partners would compute from program enrollment.
   const dayInProgram = 47;
+
+  const [weightProgress, setWeightProgress] = useState<{
+    weightTracking: WeightTracking | null;
+    weightGoal: PlanArtifactWeight | null;
+  } | null>(null);
+  const [bodyComposition, setBodyComposition] =
+    useState<BodyComposition | null>(null);
+
+  const fetchProgress = useCallback(async () => {
+    const [wp, bc] = await Promise.all([
+      getWeightProgress(),
+      getBodyComposition(),
+    ]);
+    setWeightProgress(wp);
+    setBodyComposition(bc);
+  }, [getWeightProgress, getBodyComposition]);
+
+  useEffect(() => {
+    fetchProgress();
+  }, [fetchProgress]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -52,7 +79,7 @@ export const Home: FC = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Greeting (partner) */}
+        {/* Greeting */}
         <View style={styles.greetingBlock}>
           <Text style={styles.brand}>{PARTNER_BRAND.name}</Text>
           <Text style={styles.greeting}>
@@ -63,24 +90,26 @@ export const Home: FC = () => {
           </Text>
         </View>
 
-        {/* PARTNER: Dose */}
-        <DoseCard />
+        {/* MIRI: today's quick check-in (medication / mood / symptoms / movement) */}
+        <HomeQuickCheckInBlock onFlowComplete={fetchProgress} />
 
-        {/* MIRI: progress (weight + key signals) */}
-        <HomeProgressBlock />
+        {/* MIRI: weight chart */}
+        <View style={styles.progressBlock}>
+          <SectionHeader>Your progress</SectionHeader>
+          <HomeWeightChart
+            currentValue={weightProgress?.weightTracking?.current?.value ?? null}
+            currentUnit={weightProgress?.weightTracking?.current?.unit ?? null}
+            goalValue={weightProgress?.weightGoal?.value ?? null}
+            goalUnit={weightProgress?.weightGoal?.unit ?? null}
+          />
+          <KeySignalsRow
+            bodyComposition={bodyComposition}
+            leverScores={wellnessScore?.lever_scores}
+          />
+        </View>
 
         {/* MIRI: coaching (priority action + insight + chip rail) */}
         <HomeCoachingBlock />
-
-        {/* PARTNER: upcoming */}
-        <View style={styles.upcomingSection}>
-          <SectionHeader>Upcoming</SectionHeader>
-          <View style={styles.upcomingCards}>
-            <VisitCard />
-            <RefillCard />
-            <LabSnippet />
-          </View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -118,10 +147,8 @@ const styles = StyleSheet.create({
     color: partnerColors.textMuted,
     marginTop: 4,
   },
-  upcomingSection: {
+  progressBlock: {
+    paddingHorizontal: 16,
     gap: 12,
-  },
-  upcomingCards: {
-    gap: 10,
   },
 });

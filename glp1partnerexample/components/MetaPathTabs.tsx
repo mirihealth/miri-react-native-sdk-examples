@@ -39,8 +39,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Account } from './Account';
 import { Care } from './Care';
 import { Home } from './Home';
-import { Meds } from './Meds';
 import { partnerColors } from './partnerTheme';
+import { Progress } from './Progress';
 import { PartnerTabParamList, RootStackParamList } from './types';
 
 const Tab = createBottomTabNavigator<PartnerTabParamList>();
@@ -53,7 +53,7 @@ interface TabSpec {
 
 const LEFT_TABS: TabSpec[] = [
   { name: 'Home', label: 'Home', icon: 'home' },
-  { name: 'Meds', label: 'Meds', icon: 'pills' },
+  { name: 'Progress', label: 'Progress', icon: 'chart-line' },
 ];
 const RIGHT_TABS: TabSpec[] = [
   { name: 'Care', label: 'Care', icon: 'user-md' },
@@ -217,7 +217,7 @@ export const MetaPathTabs: FC = () => {
         screenOptions={{ headerShown: false }}
       >
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Meds" component={Meds} />
+        <Tab.Screen name="Progress" component={Progress} />
         <Tab.Screen name="Care" component={Care} />
         <Tab.Screen name="Account" component={Account} />
       </Tab.Navigator>
