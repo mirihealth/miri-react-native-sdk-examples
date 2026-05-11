@@ -1,10 +1,12 @@
 // HomeQuickCheckInBlock — inline quick check-in flow on MetaPath's Home.
 //
-// Wraps the SDK's <QuickCheckinFlow> with four partner-defined cards:
+// Wraps the SDK's <QuickCheckinFlow> with six partner-defined cards:
 //   1. Medication adherence (timing + injection site + side effects)
 //   2. Mood (5-emoji button select)
 //   3. Symptoms (gut/GLP-1 symptom multi-select)
 //   4. Movement (activity-level grid)
+//   5. Sleep (hours, number input)
+//   6. Hydration (water-glass field, default 64oz goal)
 //
 // Card responses are persisted to the server via the SDK's
 // useQuickCheckinRepository.submitQuickCheckinCard — same path the
@@ -156,6 +158,52 @@ const MOVEMENT_CARD: QuickCheckinCardConfig = {
   },
 };
 
+const SLEEP_CARD: QuickCheckinCardConfig = {
+  artifactType: 'tracking_item_sleep',
+  title: 'How did you sleep last night?',
+  subtitle: 'GLP-1 patients often need an extra 30 min to regulate appetite',
+  presentation: {
+    mode: 'sheet',
+    sheetTitle: 'Track sleep',
+    triggerLabel: 'Track sleep',
+    triggerCompletedLabel: 'Sleep tracked',
+    submitLabel: 'Save',
+  },
+  field: {
+    type: 'number',
+    name: 'sleep_hours',
+    label: 'How many hours did you sleep?',
+    min: 0,
+    max: 24,
+    unit: 'hours',
+    placeholder: '7.5',
+  },
+};
+
+// Goal is hard-coded here for the example. Real partners would pull it
+// from the user's hydration goal via `useActiveHabitGoal` or the program
+// config. `currentTotalOz` resets to 0 on every render — for a static
+// demo this is fine; production would aggregate the day's water artifacts.
+const HYDRATION_CARD: QuickCheckinCardConfig = {
+  artifactType: 'water_intake_tracking',
+  title: 'How much water have you had?',
+  subtitle: '64oz/day is a typical target on Tirzepatide',
+  presentation: {
+    mode: 'sheet',
+    sheetTitle: 'Track hydration',
+    triggerLabel: 'Track water',
+    triggerCompletedLabel: 'Water tracked',
+    submitLabel: 'Save',
+  },
+  field: {
+    type: 'water_glass',
+    name: 'water_oz',
+    label: 'How much water so far today?',
+    goalOz: 64,
+    currentTotalOz: 0,
+  },
+};
+
 interface HomeQuickCheckInBlockProps {
   onFlowComplete?: () => void;
 }
@@ -166,7 +214,14 @@ export const HomeQuickCheckInBlock: FC<HomeQuickCheckInBlockProps> = ({
   const { submitQuickCheckinCard } = useQuickCheckinRepository();
 
   const cards = useMemo<QuickCheckinCardConfig[]>(
-    () => [MEDICATION_CARD, MOOD_CARD, SYMPTOMS_CARD, MOVEMENT_CARD],
+    () => [
+      MEDICATION_CARD,
+      MOOD_CARD,
+      SYMPTOMS_CARD,
+      MOVEMENT_CARD,
+      SLEEP_CARD,
+      HYDRATION_CARD,
+    ],
     [],
   );
 
