@@ -166,23 +166,33 @@ export const MetaPathTabs: FC = () => {
           ))}
 
           <View style={styles.centerSlot}>
-            <LogPickerV2
-              weightProgress={
-                weightProgress ?? {
-                  weightGoal: null,
-                  weightTracking: null,
+            {/* Gate LogPickerV2 on program presence — the SDK memoizes
+                `isProgramFeatureEnabled` at first render (stable
+                `useCallback` deps), so if LogPickerV2 mounts before
+                `useProgram()` resolves, all program-feature-gated tiles
+                (Sleep, Water, Mood, Mind-Body, Activity Level) stay
+                hidden forever even after the program loads. Deferring
+                mount until `program !== null` makes the first render
+                see the right features. */}
+            {program ? (
+              <LogPickerV2
+                weightProgress={
+                  weightProgress ?? {
+                    weightGoal: null,
+                    weightTracking: null,
+                  }
                 }
-              }
-              bodyComposition={bodyComposition}
-              onUpdateTracking={handleUpdateTracking}
-              onNavigateToChat={navigateToChat}
-              onNavigateToLogMeal={handleNavigateToLogMeal}
-              onLogSuccess={() => {
-                handleLogMealSuccess();
-                refetchMedicationGoal();
-              }}
-              medicationGoal={medicationGoal}
-            />
+                bodyComposition={bodyComposition}
+                onUpdateTracking={handleUpdateTracking}
+                onNavigateToChat={navigateToChat}
+                onNavigateToLogMeal={handleNavigateToLogMeal}
+                onLogSuccess={() => {
+                  handleLogMealSuccess();
+                  refetchMedicationGoal();
+                }}
+                medicationGoal={medicationGoal}
+              />
+            ) : null}
           </View>
 
           {RIGHT_TABS.map((spec) => (
