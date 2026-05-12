@@ -109,35 +109,92 @@ That's the full integration shape. No bundler aliases, shim files, or transform 
 
 ### Authentication
 
-The SDK accepts a Firebase ID token. Your backend mints the token tied to your existing user identity:
+The SDK accepts a Firebase ID token tied to a Miri `care_seeker_id`. Your backend exposes a small **auth webhook** that the client calls on session start; the webhook authenticates your own user (cookie / JWT / OAuth — whatever your existing auth uses), maps that user to their Miri care_seeker, and returns a fresh Firebase ID token the SDK can use.
+
+#### How the mapping is established
+
+Each end-user maps 1:1 to a Miri `care_seeker_id`. The mapping is created once, when you onboard the user — typically at the time you create the Miri patient record from your enrollment flow. Store the `care_seeker_id` on your own user row so subsequent lookups are a single column read.
+
+#### The auth webhook
+
+Expose an endpoint on your backend — for example `POST /api/miri-token` — that:
+
+1. Authenticates the incoming request using your existing auth (session cookie, bearer JWT, etc.)
+2. Looks up the Miri `care_seeker_id` for the authenticated user
+3. Mints a Firebase custom token for that `care_seeker_id` using Firebase Admin
+4. Exchanges the custom token for a short-lived (1 hour) ID token via the Firebase Auth REST API
+5. Returns the ID token to the client
+
+Reference implementation (Node, using `firebase-admin`):
 
 ```ts
-// On your server (Node example using firebase-admin)
+// /api/miri-token
 import { getAuth } from 'firebase-admin/auth';
 
-async function mintMiriToken(yourUserId: string) {
-  // Map your user to a Miri care_seeker (1:1 binding established at
-  // care-seeker creation time).
-  const careSeekerUid = await lookupCareSeekerForUser(yourUserId);
-  const customToken = await getAuth().createCustomToken(careSeekerUid);
+export async function handler(req, res) {
+  // 1. Authenticate the request against your own auth system.
+  const yourUser = await authenticateRequest(req);
+  if (!yourUser) return res.status(401).end();
 
-  // Exchange custom token for ID token via Firebase Auth REST API.
-  const res = await fetch(
-    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${FIREBASE_WEB_API_KEY}`,
+  // 2. Look up the care_seeker_id you stored at onboarding.
+  const careSeekerId = yourUser.miri_care_seeker_id;
+
+  // 3. Mint a Firebase custom token signed by Firebase Admin.
+  const customToken = await getAuth().createCustomToken(careSeekerId);
+
+  // 4. Exchange for a 1-hour Firebase ID token via Firebase Auth REST.
+  const exchangeRes = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${process.env.FIREBASE_WEB_API_KEY}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: customToken, returnSecureToken: true }),
     }
   );
-  const { idToken } = await res.json();
-  return idToken;
+  const { idToken, expiresIn } = await exchangeRes.json();
+
+  // 5. Return to the client.
+  res.json({ idToken, expiresIn });
 }
 ```
 
-Then expose an endpoint your client calls on session start. Firebase ID tokens are short-lived (1 hour) — your client refreshes by calling the endpoint again, or by using the Firebase Web SDK to refresh client-side with a refresh token.
+A complete working example is at `webexample/api/demo-token.ts` in the reference repo.
 
-A working example of this pattern is in the reference repo (see Appendix).
+#### Client integration
+
+The client calls the webhook on app load, passes the returned token to `MiriAppProvider`, and refreshes by calling the webhook again before the token expires (or eagerly on each app start, since CDN-cached responses keep this cheap):
+
+```tsx
+function PatientPortal() {
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/miri-token', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((data) => setToken(data.idToken));
+  }, []);
+
+  if (!token) return <Loading />;
+
+  return (
+    <MiriAppProvider
+      apiKey={process.env.MIRI_API_KEY!}
+      env="production"
+      auth={{
+        token,
+        provider: 'firebase',
+        config: { project_id: 'your-firebase-project-id' },
+      }}
+    >
+      {/* your composition */}
+    </MiriAppProvider>
+  );
+}
+```
+
+#### Where Firebase fits
+
+The SDK uses Firebase Auth as the token format. Your backend signs tokens using a Firebase Admin service account that your Miri service rep provisions for your organization. The Firebase project is operated by Miri — you don't run a Firebase project yourself, you just hold the service-account credentials needed to sign tokens for your users.
 
 ### Available components
 
