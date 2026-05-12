@@ -9,7 +9,7 @@
 
 Miri ships two integration paths for web:
 
-1. **`@miri-ai/miri-react-native` with the `webexample/` reference integration** — a complete Vite + React Native Web setup that bundles the full SDK for web. Clone the reference, point it at your environment, and you have a working integration. Use this when you want Miri surfaces (chat, insights, scores, habit tracking, logging) woven into your portal's UX.
+1. **`@miri-ai/miri-react-native/web` paired with `@miri-ai/miri-react-native-web`** — the SDK with its web companion package. Drop components into your own React app and compose them however your product needs. Use this when you want Miri surfaces (chat, insights, scores, habit tracking, logging) woven into your portal's UX.
 2. **Hosted chat embed** — a Miri-hosted URL you drop into an iframe or WebView. Use this when you want a turnkey coach experience inside a portal without writing any SDK integration code.
 
 Both paths run identically inside a browser portal and inside a WebView-wrapped mobile app, so the same integration covers both surfaces.
@@ -18,35 +18,58 @@ A live demo is available at **https://dist-sand-tau-14.vercel.app/** — it moun
 
 ---
 
-## Path 1 — Reference Vite + React Native Web integration
+## Path 1 — Self-served SDK with the web companion package
 
-### Get the reference integration
+### Install
 
 ```bash
-git clone https://github.com/mirihealth/miri-react-native-sdk-examples.git
-cd miri-react-native-sdk-examples
-git checkout web-sdk-example
-cd webexample
-npm install
+npm install @miri-ai/miri-react-native @miri-ai/miri-react-native-web \
+  react react-dom react-native-web vite
 ```
 
-The `webexample/` directory contains a complete Vite + React Native Web setup that bundles the full SDK for web. It includes:
+- `@miri-ai/miri-react-native` — the SDK itself (same package used by the iOS / Android apps).
+- `@miri-ai/miri-react-native-web` — companion package that ships the Vite plugin, runtime polyfills, and shim modules needed to bundle the SDK on web.
 
-- The Vite configuration with `vite-plugin-react-native-web` plus the additional resolvers, shim aliases, and runtime polyfills needed to bundle React Native packages with native-only transitive dependencies
-- Pre-built shims for `lottie-react-native`, `react-native-linear-gradient`, `@react-native-community/blur`, Firebase Auth's RN-specific `getReactNativePersistence`, and the `react-native/Libraries/Utilities/codegen*` subpaths
-- A reference Vercel deployment (`api/demo-token.ts`) showing the server-side token-minting pattern
+### Configure Vite
 
-Browse the branch directly: https://github.com/mirihealth/miri-react-native-sdk-examples/tree/web-sdk-example/webexample
+```ts
+// vite.config.mts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import reactNativeWeb from 'vite-plugin-react-native-web';
+import { configureViteForMiri } from '@miri-ai/miri-react-native-web/vite';
 
-### Copy + adapt
+const miri = configureViteForMiri();
 
-Copy the `webexample/` directory into your codebase as the starting point for your web integration. The pieces you adapt for your environment:
+export default defineConfig({
+  ...miri,
+  plugins: [...(miri.plugins ?? []), reactNativeWeb(), react()],
+  // ...your own config
+});
+```
 
-1. **`src/App.tsx`** — replace the demo Home / Progress / Care tabs with your own component composition. The `MiriAppProvider` setup is the only Miri-specific code; everything else is your UI.
-2. **`api/demo-token.ts`** — replace the hardcoded demo `care_seeker_id` with a lookup against your auth system. This is the only server-side code path; the integration is otherwise fully client-side.
-3. **`.env`** — set your own `MIRI_API_KEY` (from your Miri service rep) and Firebase project credentials.
+`configureViteForMiri()` returns the resolver aliases, the JSX-in-`.js` transform plugin, the `optimizeDeps` excludes, and the rollup `shimMissingExports` flag needed for the SDK to bundle cleanly. Spread it into your config; your own plugins and options sit alongside.
 
-The `vite.config.mts` and `shims/` directory don't need changes — they're the SDK plumbing.
+### Install the runtime polyfill
+
+In your `main.tsx` / `main.ts`, set up the runtime polyfill before any SDK component imports:
+
+```ts
+// main.tsx
+import { setupMiriWebRuntime } from '@miri-ai/miri-react-native-web/runtime';
+
+await setupMiriWebRuntime();
+
+const { App } = await import('./App');
+const { AppRegistry } = await import('react-native');
+
+AppRegistry.registerComponent('App', () => App);
+AppRegistry.runApplication('App', {
+  rootTag: document.getElementById('root'),
+});
+```
+
+`setupMiriWebRuntime` installs a `window.require` dispatcher that resolves the small number of runtime `require()` calls left in the SDK bundle (React Native Web's `createReactDOMStyle`, `preprocess`, Lottie, Linear Gradient) and provides a permissive proxy fallback for native-module probes that don't apply on web.
 
 ### Import components
 
@@ -64,10 +87,18 @@ import {
   HabitTracking,
   KeySignalsRow,
   InsightCard,
-} from '@miri-ai/miri-react-native';
+} from '@miri-ai/miri-react-native/web';
 ```
 
-The same import paths used by the native (iOS / Android) SDK work on web — the bundler config in `webexample/` handles the React Native → React Native Web translation, the native-dep shimming, and the runtime polyfills for you.
+The `/web` subpath re-exports the full SDK surface and signals that the import is for a web bundle. Component APIs are identical to the native SDK — the same `<Chat>`, `<QuickCheckinFlow>`, `<LogPickerV2>` that work in your iOS / Android RN app work here. The companion package handles the React Native → React Native Web translation, native-dep shimming, and runtime polyfills.
+
+### Reference integration
+
+A complete working integration — Vite, the companion package, an `api/demo-token.ts` serverless function showing the server-side auth pattern, and the full Home / Progress / Care tab composition — lives in `miri-react-native-sdk-examples`:
+
+🔗 https://github.com/mirihealth/miri-react-native-sdk-examples/tree/web-sdk-example/webexample
+
+Clone the branch, copy `webexample/`, swap in your own auth and component composition, and you have a working web integration in under an hour.
 
 ### Wire up the provider
 
