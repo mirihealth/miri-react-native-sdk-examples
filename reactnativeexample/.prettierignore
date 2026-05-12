@@ -1,9 +1,0 @@
-ios/
-android/
-node_modules/
-build/
-dist/
-.vscode/
-.git/
-.DS_Store
-.env
