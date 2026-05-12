@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.vite/
+_sdk.tgz
+.env
+.env.local
+.vercel

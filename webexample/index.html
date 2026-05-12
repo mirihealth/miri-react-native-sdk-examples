@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Miri Embed</title>
+    <style>
+      html, body, #root { margin: 0; padding: 0; height: 100%; overflow: hidden; -webkit-font-smoothing: antialiased; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    </style>
+    <script>
+      // Surface any uncaught runtime error so a blank-page failure is
+      // diagnosable without devtools. Disable in production.
+      window.__miriErrors = [];
+      window.addEventListener('error', function (e) {
+        window.__miriErrors.push({
+          msg: e.message,
+          src: e.filename,
+          line: e.lineno,
+          col: e.colno,
+          stack: e.error && e.error.stack,
+        });
+        renderErrors();
+      });
+      window.addEventListener('unhandledrejection', function (e) {
+        var r = e.reason;
+        window.__miriErrors.push({
+          msg: 'Unhandled promise rejection: ' + (r && r.message ? r.message : String(r)),
+          stack: r && r.stack,
+        });
+        renderErrors();
+      });
+      function renderErrors() {
+        var root = document.getElementById('root');
+        if (!root) return;
+        root.innerHTML =
+          '<pre style="white-space:pre-wrap;padding:16px;font-size:12px;color:#b91c1c;background:#fef2f2;font-family:ui-monospace,Menlo,monospace">' +
+          window.__miriErrors
+            .map(function (e) {
+              return [
+                'ERROR: ' + e.msg,
+                e.src ? '  at ' + e.src + ':' + e.line + ':' + e.col : '',
+                e.stack ? '\n' + e.stack : '',
+              ]
+                .filter(Boolean)
+                .join('\n');
+            })
+            .join('\n\n---\n\n') +
+          '</pre>';
+      }
+      // Polyfill `require` for RN packages that use try/catch native-
+      // module detection at runtime (e.g. gifted-charts probing for
+      // react-native-linear-gradient). Returns a permissive Proxy so
+      // any property access (`.LinearGradient`, `.NativeModule`, etc.)
+      // resolves to a passthrough component / no-op fn.
+      //
+      // When called as a function, returns an identity proxy that's
+      // safe to use as a style transformer / array map fn — i.e. it
+      // returns its argument unchanged. This handles the case where a
+      // missing module is invoked as a transform (e.g. RN-web's
+      // createReactDOMStyle).
+      if (typeof window.require === 'undefined') {
+        var __miriRequireStub = function () {
+          var ph = function (input) {
+            // Identity: return whatever was passed in. Style
+            // transformers expect an object back; rendering passthroughs
+            // can pull `.children` off this.
+            if (input && typeof input === 'object') return input;
+            return null;
+          };
+          var handler = {
+            get: function (_t, prop) {
+              if (prop === '__esModule') return true;
+              if (prop === 'default') return ph;
+              return ph;
+            },
+            apply: function (_t, _this, args) {
+              return ph(args && args[0]);
+            },
+          };
+          return new Proxy(ph, handler);
+        };
+        window.require = function (_id) {
+          return __miriRequireStub();
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
