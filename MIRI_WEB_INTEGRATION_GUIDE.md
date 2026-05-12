@@ -1,7 +1,7 @@
 # Miri SDK — Web Integration Guide
 
 **Audience:** Engineering teams integrating Miri into a web portal or WebView-wrapped mobile app
-**Contact:** integrations@miri.ai
+**Contact:** your Miri service rep
 
 ---
 
@@ -215,4 +215,4 @@ A complete reference integration is available in the `miri-react-native-sdk-exam
 
 Clone the repo, copy `webexample/`, point it at your own staging environment, and you have a working integration in under an hour.
 
-For repo access or production API keys, contact integrations@miri.ai.
+For repo access or production API keys, contact your Miri service rep.
