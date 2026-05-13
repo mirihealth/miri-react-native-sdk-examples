@@ -15,6 +15,7 @@ Once you have those three, you're ready to wire up.
 ## The smallest possible app
 
 ```tsx
+import { useEffect, useState } from 'react';
 import { MiriAppProvider, Chat } from '@miri-ai/miri-react-native';
 
 export function App() {
@@ -45,18 +46,14 @@ That's a full integration. `<MiriAppProvider>` mounts every Miri context the SDK
 ## Install
 
 ```bash
-npm install @miri-ai/miri-react-native@^1.237.0
+npm install @miri-ai/miri-react-native@^1.236.0
 # Optional, only if you're targeting web:
-npm install @miri-ai/miri-react-native-web@^0.1.1
+npm install @miri-ai/miri-react-native-web@^0.1.0
 ```
 
-Peer dependencies (you almost certainly have these already if you're building an RN app):
+Node 20+ is recommended (matches the SDK's `.nvmrc`).
 
-- `react` ≥ 18.2
-- `react-native` ≥ 0.74
-- `react-native-svg`, `react-native-reanimated`, `react-native-gesture-handler`, `@react-native-async-storage/async-storage`
-
-For a complete `package.json`, look at any of the example apps in this repo — they pin compatible versions.
+For peer dependencies, the SDK's `package.json` declares them with `*` ranges to give you flexibility — but in practice each example app in this repo pins the versions that are actually tested together (currently `react@19+`, `react-native@0.83+` on the bare-CLI examples). Easiest path: clone an example with the shape you're targeting and start from its `package.json`.
 
 ## Run an example
 

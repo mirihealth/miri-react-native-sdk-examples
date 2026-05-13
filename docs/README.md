@@ -2,7 +2,7 @@
 
 This is the developer guide for `@miri-ai/miri-react-native` and its web companion `@miri-ai/miri-react-native-web`. It covers everything from installation through advanced theming, multi-program SKUs, and partner-integration patterns.
 
-Current SDK version: **1.237.0**
+Current SDK version: **`^1.236.0`** (caret pins to the latest 1.x release; the `/web` subpath landed in 1.236.0 and is the contract this guide is built around).
 
 If you're a partner eng team integrating Miri for the first time, start with **[Getting started](./01-getting-started.md)** and **[Authentication](./02-authentication.md)**, then jump to whichever guide matches the surface you're building:
 

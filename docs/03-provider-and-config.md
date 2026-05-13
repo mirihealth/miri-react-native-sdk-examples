@@ -146,17 +146,8 @@ The boundary's `onError` is a good place to pipe SDK exceptions to your crash re
 
 ## Native dependencies
 
-The SDK includes several native modules. If you're on bare RN CLI (not Expo Managed), you need to install them in your `Podfile` (iOS) and `build.gradle` (Android). Most bundlers do this automatically via `react-native autolink`; check that your build picks up:
+The SDK pulls in a long tail of native modules — health data (HealthKit / Health Connect), camera (Vision Camera + expo-camera), SVG, Skia, Reanimated, the bottom-sheet stack, and more. Rather than mirror that list here (it drifts), the source of truth is the SDK's `peerDependencies` in `@miri-ai/miri-react-native`'s `package.json`. Open the installed `node_modules/@miri-ai/miri-react-native/package.json` after `npm install` and check `peerDependencies` — those are the modules that need autolinking on bare RN.
 
-- `react-native-svg`
-- `react-native-reanimated`
-- `react-native-gesture-handler`
-- `react-native-keyboard-controller`
-- `@gorhom/portal`
-- `@gorhom/bottom-sheet`
-- `react-native-vision-camera` (for meal photo capture)
-- `@react-native-async-storage/async-storage`
+For Expo Managed apps, EAS Build resolves them automatically.
 
-For Expo Managed apps, these are all in the SDK's `peerDependencies` and resolved by EAS Build.
-
-The example apps in this repo show the full native-deps shape for both Expo and bare-CLI projects.
+For bare RN CLI: most bundlers autolink via `react-native autolink` (or `pod install` on iOS / Gradle on Android). The cleanest verification is to clone an example with the platform shape you're targeting (e.g. `multiprogramexample` for bare RN, `expoexample` for Expo Managed) and start from its `package.json` + native config.

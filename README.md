@@ -30,6 +30,7 @@ Full descriptions in [`docs/08-example-apps.md`](./docs/08-example-apps.md).
 ## Quick start
 
 ```tsx
+import { useEffect, useState } from 'react';
 import { MiriAppProvider, Chat } from '@miri-ai/miri-react-native';
 
 export function App() {

@@ -309,4 +309,4 @@ open({ component: <YourSheet />, snapPoints: [350, '80%'] });
 - `use<NounContext>()` — context-reading hooks (`useCareSeeker`, `useProgram`).
 - `use<Noun>()` — TanStack Query-backed hooks that return `{ data, isLoading, refetch, … }`.
 
-If you find yourself wanting a hook that isn't here, check the SDK source — `package/src/hooks/` has the full list — or [file an issue](https://github.com/mirihealth/miri-react-native-sdk-examples/issues).
+If you find yourself wanting a hook that isn't here, autocomplete from `@miri-ai/miri-react-native` will surface anything we've exported — or [file an issue](https://github.com/mirihealth/miri-react-native-sdk-examples/issues) and we'll point you at it (or add it).

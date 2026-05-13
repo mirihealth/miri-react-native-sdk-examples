@@ -19,6 +19,7 @@ The SDK uses Firebase Auth as the token format. The Firebase project is operated
 ### Client-side (mobile / web)
 
 ```tsx
+import { useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import { MiriAppProvider } from '@miri-ai/miri-react-native';
 
@@ -102,6 +103,7 @@ A complete working example is at [`webexample/api/demo-token.ts`](https://github
 ## Google Sign-In
 
 ```tsx
+import { useEffect, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { MiriAppProvider } from '@miri-ai/miri-react-native';
 
@@ -148,6 +150,7 @@ Reference: [`expoexample`](https://github.com/mirihealth/miri-react-native-sdk-e
 ## Apple Sign-In
 
 ```tsx
+import { useEffect, useState } from 'react';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import { MiriAppProvider } from '@miri-ai/miri-react-native';
 
@@ -188,11 +191,14 @@ function App() {
 
 ## Token refresh
 
-Tokens are short-lived (~1 hour for Firebase ID tokens). The SDK accepts a fresh `token` value on `<MiriAppProvider>` every render, so the simplest refresh pattern is:
+Firebase ID tokens expire after ~1 hour. The SDK accepts a fresh `token` value on `<MiriAppProvider>` every render, so the safe refresh pattern is to **schedule against the token's actual expiry** rather than a hand-rolled timeout:
 
 1. Hold the token in state.
-2. Re-fetch it on app foreground (or via a `setTimeout` you start when you receive it, scheduled for ~55 minutes).
-3. Set the new token; `<MiriAppProvider>` picks it up on next render.
+2. When you receive a new token, also stash the `expiresIn` value the Identity Toolkit returned (the webhook example returns it alongside `idToken`). Schedule a `setTimeout` for `(expiresIn - 60) * 1000` ms so you refresh ~1 min before expiry.
+3. Also re-fetch on app foreground — covers cold starts after the timer was killed during background.
+4. Set the new token; `<MiriAppProvider>` picks it up on next render.
+
+If you only refresh on foreground without a scheduled refresh, an app that's been backgrounded longer than the token's TTL will fire its first post-resume API call with an expired token and 401 before the foreground listener can intercept it. The schedule + foreground pair avoids the race.
 
 For Firebase, `auth().currentUser.getIdToken(true)` produces a fresh token if you're using `@react-native-firebase/auth` directly. For the webhook pattern, just hit your `/api/miri-token` endpoint again.
 
