@@ -4,9 +4,25 @@ The SDK ships dozens of components. This page groups them by surface so you can 
 
 All components below come from `@miri-ai/miri-react-native` (or `@miri-ai/miri-react-native/web` for the web subpath, which re-exports the same surface). They all read from `<MiriAppProvider>`'s contexts; no per-component setup beyond that.
 
+## How the surfaces depend on each other
+
+Most of the coaching components only do their job once the user is feeding Miri behavior data. Concretely:
+
+- **`PriorityActionCard`, `InsightCard`, `WeeklyReviewCard`, `CorrelationCard`** read from the agentic coach + the L1→L3 pipeline. That pipeline is fed by **daily check-in** data (mood / movement / sleep / hydration / meals). Without a check-in surface wired up, these coaching components stay in a cold-start state — they'll render with generic copy but won't reflect the user.
+- **`DailyCheckIn` + `SymptomsTracker`** are the typical input side. Drop those (or your own equivalent) into the daily loop before you expect the coaching surfaces to feel useful.
+- **`ScoreCard`, `KeySignalsRow`, `LeverBreakdown`, `WeightChart`** read from `useWellnessScore()` / `useWeightHistory()`. Same dependency on tracking artifacts existing.
+
+If you're building a partner integration, the practical sequencing is: ship the check-in + logging surfaces first, then layer the coaching surfaces on top.
+
+## What's currently live in the Miri app vs SDK-available
+
+Everything on this page is exported by the SDK. A subset is also rendered in the production Miri mobile app today; the rest are SDK-available for partners to compose into their own surfaces but aren't yet on the main app's Home / Progress / Coach tabs. Newer entries (e.g. `WeeklyReviewCard`, `ProgramRecommendationCard`, `SymptomsTracker`, `CorrelationCard`, `ActionPlanCard`, `BringListCard`) come from partner-demo work and are wired in the demos but not in the main app yet — they're stable enough to compose, just not "yet shipped to Miri-the-product."
+
+If you need to know whether a specific component is rendering in the main Miri app right now (vs SDK-only), check the relevant screen in `miri-reactnative` or ask your service rep.
+
 ## Coaching surfaces
 
-The "what should I do, why, and how is my plan going" layer. These are the highest-engagement surfaces in any Miri integration.
+The "what should I do, why, and how is my plan going" layer. These are the highest-engagement surfaces in any Miri integration. **All assume a check-in surface is feeding them data — see the dependency note above.**
 
 | Component | What it renders | Reads from |
 |---|---|---|
@@ -88,14 +104,14 @@ import { DailyCheckIn, SymptomsTracker } from '@miri-ai/miri-react-native';
 
 ## Progress & signals
 
-The "is this working" surface — scores, levers, weight, goals.
+The "is this working" surface — scores, weight, goals, per-behavior progress.
 
 | Component | What it renders | Reads from |
 |---|---|---|
 | **`ScoreCard`** | Composite Wellness Score with delta vs prior period | `useWellnessScore()` |
 | **`ScoreDetailCard`** | Full breakdown of a single score | `useWellnessScore()` |
-| **`KeySignalsRow`** | 3-up row of high-priority lever scores (e.g. Muscle Mass / Hydration / Steps) | `useWellnessScore()` |
-| **`LeverBreakdown`** | All lever scores with progress bars | `useWellnessScore()` |
+| **`KeySignalsRow`** | 3-up row of behavior scores (e.g. Muscle Mass / Hydration / Steps) | `useWellnessScore()` |
+| **`LeverBreakdown`** | Per-behavior progress with progress bars (sleep, movement, hydration, protein, …) | `useWellnessScore()` |
 | **`WellnessScore`** | Compact score pill (smaller than `ScoreCard`) | `useWellnessScore()` |
 | **`WeightChart`** | 7-day weight trend + optional dashed projection to goal | `useWeightHistory()` |
 | **`BodyStatsProgress`** | Weight + body comp progress block | `useMiriApp()` |
