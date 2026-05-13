@@ -23,7 +23,7 @@ If you're a partner eng team integrating Miri for the first time, start with **[
 5. **[Components](./05-components.md)** — full catalog. Coaching surfaces (PriorityActionCard / InsightCard / CoachChipRail / WeeklyReviewCard / ProgramRecommendationCard), daily check-in (DailyCheckIn / SymptomsTracker / LogPickerV2 / ScanFoodModal), progress (WeightChart / KeySignalsRow / GoalsCard), visit prep (BringListCard), chat (Chat / MessagesList / ChatInput), settings (UserSettings).
 6. **[Hooks reference](./06-hooks.md)** — every public hook: identity, programs, scores, insights, meal/weight repositories, chat session APIs.
 7. **[Web integration](./07-web-integration.md)** — Vite plugin, runtime polyfill, behavior differences on web, hosted-chat-embed alternative.
-8. **[Example apps](./08-example-apps.md)** — `expoexample`, `reactnativeexample`, `multiprogramexample`, `nutritionistexample`, `glp1partnerexample`, `webexample`, `fridays-demo`. What each shows, which SDK surface it covers, link to source.
+8. **[Example apps](./08-example-apps.md)** — `expoexample`, `reactnativeexample`, `multiprogramexample`, `nutritionistexample`, `glp1partnerexample`, `webexample`. What each shows, which SDK surface it covers, link to source.
 
 ## Need help?
 

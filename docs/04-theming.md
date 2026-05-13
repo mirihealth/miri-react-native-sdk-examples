@@ -138,6 +138,6 @@ If you want to suppress that and force everything to your brand, override with `
 
 | Where | What |
 |---|---|
-| [`fridays-demo/src/fridaysTheme.ts`](https://github.com/mirihealth/fridays-demo/blob/main/src/fridaysTheme.ts) | Friday's brand colors + radii + spacing, with the SDK theme mapping at the bottom |
 | [`webexample/src/App.tsx`](https://github.com/mirihealth/miri-react-native-sdk-examples/blob/web-sdk-example/webexample/src/App.tsx) | Minimal theme wired to `<MiriAppProvider>` |
 | [`nutritionistexample/`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/nutritionist-partner-example/nutritionistexample) | Distinct partner brand wrapped around Miri's coach tab |
+| [`multiprogramexample/`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/glp1-partner-example/multiprogramexample) | Full multi-program SKU rendered with the default Miri theme |

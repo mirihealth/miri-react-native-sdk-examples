@@ -24,7 +24,6 @@ If you just want to dive in:
 | **`nutritionistexample/`** | [`feat/nutritionist-partner-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/nutritionist-partner-example/nutritionistexample) | "Coach tab" partner integration pattern |
 | **`glp1partnerexample/`** | [`feat/glp1-partner-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/glp1-partner-example/glp1partnerexample) | "Inline coaching" partner integration pattern |
 | **`webexample/`** | [`web-sdk-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/web-sdk-example/webexample) | Web portal — Vite + RN-Web + serverless token mint |
-| **`fridays-demo`** ↗ | (separate repo) | Heavily-themed GLP-1 patient portal demo — [github.com/mirihealth/fridays-demo](https://github.com/mirihealth/fridays-demo) |
 
 Full descriptions in [`docs/08-example-apps.md`](./docs/08-example-apps.md).
 

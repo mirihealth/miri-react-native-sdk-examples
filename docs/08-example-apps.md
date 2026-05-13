@@ -10,7 +10,6 @@ This repo ships several worked example integrations. Pick whichever shape best m
 | [`nutritionistexample`](#nutritionistexample) | `feat/nutritionist-partner-example` | Partner app, Miri behind a "Coach" tab | Google | "Coach tab" integration pattern |
 | [`glp1partnerexample`](#glp1partnerexample) | `feat/glp1-partner-example` | Partner app, Miri inline on Home / Meds | Google | "Inline coaching" integration pattern |
 | [`webexample`](#webexample) | `web-sdk-example` | Vite + RN-Web web portal + serverless token mint | Firebase (webhook) | Web portal integrations |
-| [`fridays-demo`](#fridays-demo) | (separate repo) | Patient-portal clone heavily themed for "Friday's" GLP-1 brand | Firebase | Highly-themed web demos |
 
 ---
 
@@ -186,32 +185,6 @@ npm run dev
 - Sales / partner demos — the live URL is shareable.
 
 For the full setup walkthrough, see [Web integration](./07-web-integration.md).
-
----
-
-## fridays-demo
-
-A patient-portal clone heavily branded for a fictional GLP-1 provider ("Friday's"). Showcases the **end-state** of a partner integration: every Miri component branded, themed, and woven into a realistic IA.
-
-**Repo:** [github.com/mirihealth/fridays-demo](https://github.com/mirihealth/fridays-demo) (separate repo from the examples)
-**Live demo:** https://fridays-demo.vercel.app/
-
-### What it demonstrates
-
-- All 11 nav routes from Friday's real portal, rebuilt
-- Miri components woven into 7 of them (Home, My Meds, Consultations, Coaching, Chat, Profile, Activity)
-- Heavy branding pass-through via `theme={miriThemeForFridays}`
-- A per-visitor cookie-sticky pool of pre-backfilled demo users
-- Day-0 / day-7 / day-30 storytelling switcher
-- Full web-SDK plumbing (Vite + companion package) you can lift wholesale
-
-### Use it for
-
-- The closest reference to "what a polished web integration looks like."
-- Demo material for sales conversations.
-- Lifting `fridaysTheme.ts` as a starting point for your own brand theme.
-
-Companion catalog: [`COMPONENTS.md`](https://github.com/mirihealth/fridays-demo/blob/main/COMPONENTS.md) — Friday's-flavored component recommendations + integration map by surface.
 
 ---
 

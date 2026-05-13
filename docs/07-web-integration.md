@@ -212,19 +212,6 @@ The demo includes a Vercel serverless function (`/api/demo-token`) that demonstr
 
 ---
 
-## Friday's-themed reference
-
-A second worked example — built around a patient-portal clone for "Friday's" (a fictional GLP-1 telehealth provider) — is deployed at **https://fridays-demo.vercel.app/**. Source: [github.com/mirihealth/fridays-demo](https://github.com/mirihealth/fridays-demo). It demonstrates:
-
-- All Miri components woven into an existing patient portal's nav structure
-- Heavy `theme` branding pass-through
-- A per-visitor cookie-sticky demo user pool
-- Day-0 / day-7 / day-30 storytelling switcher for sales demos
-
-This is the closest thing to a "you ship something like this on your portal" reference.
-
----
-
 ## Troubleshooting
 
 | Symptom | Likely fix |
