@@ -1,92 +1,63 @@
 # miri-react-native-sdk-examples
 
-Examples for the [Miri React Native SDK](https://www.miri.ai/developer/docs/alpha)
+Reference integrations for [`@miri-ai/miri-react-native`](https://www.npmjs.com/package/@miri-ai/miri-react-native) — the SDK that powers Miri's coaching, tracking, and chat surfaces in iOS, Android, and web apps.
 
-## Authentication
+## Developer documentation
 
-The SDK supports multiple auth providers. Each example can be configured to use any of them:
+**👉 Full developer guide: [`docs/`](./docs/README.md)**
 
-### Google Sign-In (default)
+Covers getting started, authentication, theming, every public component + hook, the web integration path, and every example app in this repo.
 
-Uses [Google Sign-In](https://react-native-google-signin.github.io/docs/original) to get an ID token, which is exchanged for a Miri token. See the docs for creating a [Google OAuth Client for iOS](https://support.google.com/cloud/answer/15549257?hl=en).
+If you just want to dive in:
 
-```tsx
-<MiriAppProvider
-  apiKey="<your-miri-api-key>"
-  env="staging"
-  auth={{
-    token: googleIdToken,
-    provider: 'google',
-    config: {
-      client_id: '<your-google-ios-client-id>',
-      issuer_url: 'https://www.googleapis.com/oauth2/v3/certs',
-    },
-  }}
-/>
-```
+- **First-touch**: clone [`expoexample/`](./expoexample) and run it against your staging key.
+- **Web integration**: see [`docs/07-web-integration.md`](./docs/07-web-integration.md) and the [`webexample/`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/web-sdk-example/webexample) branch.
+- **Authentication setup**: see [`docs/02-authentication.md`](./docs/02-authentication.md) — covers Google, Firebase, and Apple with full webhook code.
 
-### Firebase Authentication
+## Example apps
 
-If your app already uses Firebase Auth, you can pass the Firebase ID token directly. Set `project_id` to **your** Firebase project ID (from `google-services.json` or `GoogleService-Info.plist`).
+| Example | Branch | Shape |
+|---|---|---|
+| **`expoexample/`** | `main` | Expo managed — first-touch baseline |
+| **`reactnativeexample/`** | `main` | Bare RN CLI baseline |
+| **`multiprogramexample/`** | [`feat/glp1-partner-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/glp1-partner-example/multiprogramexample) | Full multi-program SKU (Today / Progress / Log / Coach) |
+| **`nutritionistexample/`** | [`feat/nutritionist-partner-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/nutritionist-partner-example/nutritionistexample) | "Coach tab" partner integration pattern |
+| **`glp1partnerexample/`** | [`feat/glp1-partner-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/feat/glp1-partner-example/glp1partnerexample) | "Inline coaching" partner integration pattern |
+| **`webexample/`** | [`web-sdk-example`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/web-sdk-example/webexample) | Web portal — Vite + RN-Web + serverless token mint |
 
-```tsx
-<MiriAppProvider
-  apiKey="<your-miri-api-key>"
-  env="staging"
-  auth={{
-    token: firebaseIdToken,  // from user.getIdToken()
-    provider: 'firebase',
-    config: {
-      project_id: '<your-firebase-project-id>',
-    },
-  }}
-/>
-```
+Full descriptions in [`docs/08-example-apps.md`](./docs/08-example-apps.md).
 
-### Apple Sign-In
+## Quick start
 
 ```tsx
-<MiriAppProvider
-  apiKey="<your-miri-api-key>"
-  env="staging"
-  auth={{
-    token: appleIdToken,
-    provider: 'apple',
-    config: {
-      team_id: '<your-apple-team-id>',
-      key_id: '<your-apple-key-id>',
-      issuer_url: 'https://appleid.apple.com',
-    },
-  }}
-/>
+import { useEffect, useState } from 'react';
+import { MiriAppProvider, Chat } from '@miri-ai/miri-react-native';
+
+export function App() {
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchMiriToken().then(setToken);  // your auth flow → Firebase / Google / Apple token
+  }, []);
+
+  if (!token) return <Loading />;
+
+  return (
+    <MiriAppProvider
+      apiKey="<your-miri-api-key>"
+      env="staging"
+      auth={{ token, provider: 'firebase', config: { project_id: '<your-firebase-project-id>' } }}
+    >
+      <Chat />
+    </MiriAppProvider>
+  );
+}
 ```
 
-### Important: the `env` prop
+That's a full integration. Walk through [`docs/01-getting-started.md`](./docs/01-getting-started.md) for the rest.
 
-The `env` prop controls which Miri server the SDK connects to. If omitted, it defaults to `"production"`. During development, set `env="staging"` to use your staging API key.
+## Need help?
 
-## Expo Example
-
-An [Expo](https://docs.expo.dev/) managed React Native example app showing a sample implementation for the `@miri-ai/miri-react-native` SDK. Supports both Google and Firebase auth.
-
-See the [README](/expoexample/README.md) for this example.
-
-## React Native Example
-
-A bare [React Native](https://reactnative.dev/) example app showing a sample implementation for the `@miri-ai/miri-react-native` SDK.
-
-See the [README](/reactnativeexample/README.md) for this example.
-
-## Multi-Program Example
-
-A second bare [React Native](https://reactnative.dev/) example app focused on the **multi-program SKU** (GLP-1 / weight-management) surfaces. Demonstrates the four-tab Today / Progress / Log / Coach layout, GLP-1 weight progress card with inline chart, server-driven coach chips, and the `LogPickerV2` + `ScanFoodModal` 4-tile meal-logging hub.
-
-See the [README](/multiprogramexample/README.md) for this example.
-
-## Nutritionist (Partner Integration) Example
-
-A bare [React Native](https://reactnative.dev/) example showing how a partner ships **their own branded patient app** with Miri embedded behind a single tab. The fictional customer is **NutriPath**, an EHR for nutritionists; their app has its own Schedule / Refills / Account tabs plus a **Coach** tab that mounts the full Miri experience. Both nav bars stay visible at the same time, making the integration boundary visually explicit.
-
-This is the canonical "how do I embed Miri in my existing app?" reference for partners.
-
-See the [README](/nutritionistexample/README.md) for this example.
+- **API keys, production tokens, repo access**: contact your Miri service rep.
+- **Bug reports / SDK gaps**: file an issue against this repo.
+- **Documentation questions**: ping `miri-platform-channel` in Slack or your service rep.
