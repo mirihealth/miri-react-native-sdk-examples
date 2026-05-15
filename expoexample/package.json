@@ -100,6 +100,19 @@
           "react-native-fs"
         ]
       }
+    },
+    "install": {
+      "exclude": [
+        "expo",
+        "expo-application",
+        "expo-device",
+        "expo-file-system",
+        "expo-linear-gradient",
+        "expo-splash-screen",
+        "expo-system-ui",
+        "expo-web-browser",
+        "eslint-config-expo"
+      ]
     }
   }
 }
