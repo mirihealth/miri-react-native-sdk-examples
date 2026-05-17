@@ -10,7 +10,8 @@ If you're a partner eng team integrating Miri for the first time, start with **[
 |---|---|
 | A new React Native app from scratch | [Getting started](./01-getting-started.md) → [Components](./05-components.md) |
 | An integration into an existing RN app | [Provider & config](./03-provider-and-config.md) → [Components](./05-components.md) → [Example: nutritionistexample](./08-example-apps.md#nutritionistexample) |
-| An integration into a web portal | [Web integration](./07-web-integration.md) → [Example: webexample](./08-example-apps.md#webexample) |
+| An integration into a web portal (compose Miri components yourself) | [Web integration](./07-web-integration.md) → [Example: webexample](./08-example-apps.md#webexample) |
+| A turnkey iframe embed — no SDK install | [Hosted embed](./09-hosted-embed.md) |
 | A WebView-wrapped mobile experience | [Web integration](./07-web-integration.md#web-embedded-mobile-apps) |
 | Custom theming / brand alignment | [Theming & branding](./04-theming.md) |
 
@@ -22,8 +23,9 @@ If you're a partner eng team integrating Miri for the first time, start with **[
 4. **[Theming & branding](./04-theming.md)** — `theme` prop pass-through, the practitioner color cascade, per-component style overrides.
 5. **[Components](./05-components.md)** — full catalog. Coaching surfaces (PriorityActionCard / InsightCard / CoachChipRail / WeeklyReviewCard / ProgramRecommendationCard), daily check-in (DailyCheckIn / SymptomsTracker / LogPickerV2 / ScanFoodModal), progress (WeightChart / KeySignalsRow / GoalsCard), visit prep (BringListCard), chat (Chat / MessagesList / ChatInput), settings (UserSettings).
 6. **[Hooks reference](./06-hooks.md)** — every public hook: identity, programs, scores, insights, meal/weight repositories, chat session APIs.
-7. **[Web integration](./07-web-integration.md)** — Vite plugin, runtime polyfill, behavior differences on web, hosted-chat-embed alternative.
+7. **[Web integration](./07-web-integration.md)** — the self-served SDK path: Vite plugin, runtime polyfill, behavior differences on web.
 8. **[Example apps](./08-example-apps.md)** — `expoexample`, `reactnativeexample`, `multiprogramexample`, `nutritionistexample`, `glp1partnerexample`, `webexample`. What each shows, which SDK surface it covers, link to source.
+9. **[Hosted embed](./09-hosted-embed.md)** — the turnkey path: iframe-able coach / logging / progress surfaces at `embed.miri.ai`, URL-param theming, the playground, demo tokens, and the custom-auth-webhook flow for production.
 
 ## Need help?
 

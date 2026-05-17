@@ -9,7 +9,7 @@
 Miri ships two integration paths for web:
 
 1. **`@miri-ai/miri-react-native/web` paired with `@miri-ai/miri-react-native-web`** — the SDK with its web companion package. Drop components into your own React app and compose them however your product needs. Use this when you want Miri surfaces (chat, insights, scores, habit tracking, logging) woven into your portal's UX.
-2. **Hosted chat embed** — a Miri-hosted URL you drop into an iframe or WebView. Use this when you want a turnkey coach experience inside a portal without writing any SDK integration code.
+2. **Hosted embed** — Miri-hosted URLs you drop into an iframe or WebView. Use this when you want turnkey coach / logging / progress surfaces inside a portal without writing any SDK integration code. Documented in full in [Hosted embed](./09-hosted-embed.md).
 
 Both paths run identically inside a browser portal and inside a WebView-wrapped mobile app, so the same integration covers both surfaces.
 
@@ -164,28 +164,23 @@ All other surfaces — chat, scoring, lever breakdowns, insights, habit tracking
 
 ---
 
-## Path 2 — Hosted chat embed
+## Path 2 — Hosted embed
 
-If you want a coach experience in your portal without writing SDK integration code, embed a Miri-hosted URL:
+If you want Miri surfaces in your portal without writing any SDK integration code, drop a Miri-hosted URL into an iframe:
 
-```tsx
-// In a browser portal
+```html
 <iframe
-  src={`https://embed.miri.ai/v1/chat?token=${miriToken}`}
+  src="https://embed.miri.ai/coach?api_key=YOUR_KEY#token=USER_TOKEN"
   width="100%"
   height="600"
+  style="border: 0;"
   allow="microphone; camera"
-/>
+></iframe>
 ```
 
-```tsx
-// Inside a WebView in your RN wrapper
-<WebView source={{ uri: `https://embed.miri.ai/v1/chat?token=${miriToken}` }} />
-```
+Miri hosts the bundle, the runtime, and the upgrade cadence — same architectural shape as Stripe Checkout, Plaid Link, or Intercom Messenger. The embed exposes standalone routes for coach, logging, and progress, theming via URL params, and a custom-auth-webhook flow for handing it your own tokens.
 
-Miri hosts the bundle, the runtime, and the upgrade cadence. You pin the version (`/v1/`, `/v2/`) and decide when to upgrade. Same architectural shape as Stripe Checkout, Plaid Link, or Intercom Messenger.
-
-The hosted embed covers the Chat surface only. For composable layouts where you arrange Miri components inside your own UX, use the self-served `/web` SDK.
+**This path is documented in full in [Hosted embed](./09-hosted-embed.md)** — routes, parameters, theming, the playground, demo tokens, and the two production authentication models. For composable layouts where you arrange Miri components inside your own UX, use the self-served SDK in Path 1 above.
 
 ---
 
