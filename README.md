@@ -12,6 +12,7 @@ If you just want to dive in:
 
 - **First-touch**: clone [`expoexample/`](./expoexample) and run it against your staging key.
 - **Web integration**: see [`docs/07-web-integration.md`](./docs/07-web-integration.md) and the [`webexample/`](https://github.com/mirihealth/miri-react-native-sdk-examples/tree/web-sdk-example/webexample) branch.
+- **Turnkey iframe embed**: see [`docs/09-hosted-embed.md`](./docs/09-hosted-embed.md) — iframe-able surfaces at `embed.miri.ai`, no SDK install.
 - **Authentication setup**: see [`docs/02-authentication.md`](./docs/02-authentication.md) — covers Google, Firebase, and Apple with full webhook code.
 
 ## Example apps
